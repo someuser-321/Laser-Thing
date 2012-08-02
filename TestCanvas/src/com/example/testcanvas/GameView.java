@@ -52,19 +52,16 @@ public class GameView extends SurfaceView {
     	
 		canvas.drawColor(Color.BLACK);
 		
-		if ( x < getWidth() - bmp.getWidth() && dir == 1) {
-			x++;
-		} else {
+		if ( x > getWidth() - bmp.getWidth() - 16 ){
 			dir = -1;
 		}
-		
-		if ( x > 0 && dir == -1) {
-			x--;
-		} else {
+		if ( x < 16 ){
 			dir = 1;
 		}
 		
-		canvas.drawBitmap(bmp, x, 10, null);
+		x += dir * 4;
+		
+		canvas.drawBitmap(bmp, x, 16, null);
 
 	}
 }
