@@ -1,4 +1,4 @@
-package com.example.testcanvas;
+package com.ChrisAndrew.Luminous;
 
 import android.graphics.Canvas;
 
