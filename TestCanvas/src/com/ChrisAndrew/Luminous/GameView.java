@@ -8,7 +8,7 @@ import android.view.*;
 
 public class GameView extends SurfaceView {
 	
-	private Bitmap bmp;
+	private Bitmap bmp, bmp_large;
 	private SurfaceHolder holder;
 	private GameLoopThread gameLoopThread;
 	
@@ -49,6 +49,7 @@ public class GameView extends SurfaceView {
 		});
 
 		bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+		bmp_large = Bitmap.createScaledBitmap(bmp, bmp.getWidth()*2, bmp.getHeight()*2, true);
 
 }
 
@@ -56,9 +57,7 @@ public class GameView extends SurfaceView {
 	protected void onDraw(Canvas canvas) {
     	
 		canvas.drawColor(Color.BLACK);
-		
-		if (touchDown)
-			canvas.drawBitmap(bmp, x, y, null);
+		canvas.drawBitmap(bmp_large, x - bmp_large.getWidth()/2, y - bmp_large.getHeight()/2, null);
 
 	}
 	
