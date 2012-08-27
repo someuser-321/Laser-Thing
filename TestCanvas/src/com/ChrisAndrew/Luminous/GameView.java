@@ -11,9 +11,12 @@ public class GameView extends SurfaceView {
 	private Bitmap bmp;
 	private SurfaceHolder holder;
 	private GameLoopThread gameLoopThread;
-	private int x = 0;
-	private int dir = 1;
+	
+	private float dx, x, x_ = 0.0f;
+	private float dy, y, y_ = 0.0f;
+	private boolean touchDown = false;
 
+	
 	public GameView(Context context) {
 	
 		super(context);
@@ -54,16 +57,40 @@ public class GameView extends SurfaceView {
     	
 		canvas.drawColor(Color.BLACK);
 		
-		if ( x > getWidth() - bmp.getWidth() - 16 ){
-			dir = -1;
-		}
-		if ( x < 16 ){
-			dir = 1;
-		}
-		
-		x += dir * 4;
-		
-		canvas.drawBitmap(bmp, x, 16, null);
+		if (touchDown)
+			canvas.drawBitmap(bmp, x, y, null);
 
 	}
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent ev){
+		
+		switch ( ev.getAction() & MotionEvent.ACTION_MASK){
+		
+			case MotionEvent.ACTION_DOWN:
+				x = ev.getX();
+				y = ev.getY();
+				touchDown = true;
+				break;
+				
+			case MotionEvent.ACTION_MOVE:
+				x_ = x;
+				y_ = y;
+				x = ev.getX();
+				y = ev.getY();
+				dx = x - x_;
+				dy = y - y_;
+				touchDown = true;
+				invalidate();
+				break;
+				
+			case MotionEvent.ACTION_UP:
+				touchDown = false;
+				break;
+		
+		}
+		
+		return true;
+	}
+	
 }
