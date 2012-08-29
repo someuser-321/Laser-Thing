@@ -6,10 +6,12 @@ public class GameLoopThread extends Thread {
 	
 	static final long FPS = 30;
 	private GameView view;
+	private Game game;
 	private boolean running = false;
 
 	public GameLoopThread(GameView view) {
 		this.view = view;
+		this.game = new Game();
 	}
 	 
 	public void setRunning(boolean run) {
@@ -35,6 +37,9 @@ public class GameLoopThread extends Thread {
 					view.getHolder().unlockCanvasAndPost(c);
 				}
 			}
+			
+			game.tick();
+			
 			sleepTime = ticksPS - (System.currentTimeMillis() - startTime);
 			if (sleepTime > 0){
 				try {
