@@ -20,8 +20,8 @@ public class Game {
 		
 		boolean success = true;
 		
-		bmp_button = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.button);
-		bmp_mirror = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.mirror);
+		//bmp_button = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.button);
+		//bmp_mirror = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.mirror);
 		
 		
 		return success;
@@ -29,34 +29,34 @@ public class Game {
 	
 	public int tick(){
 		
-		if (input_tick(gameView.touch) && physics_tick() && render_tick())
+		if (input_tick(gameView.touch) | physics_tick() | render_tick())
 			return 1;
 		
 		return 0;
 	}
 	
-	private int input_tick(TouchPoint touch){
+	private boolean input_tick(TouchPoint touch){
 		
 		for ( Button b : buttons){
 			if ( test_intercept(touch, b.x_min, b.x_max, b.y_min, b.y_max) )
 				b.press();
 		}
 
-		return 1;
+		return false;
 		
 	}
 	
-	private int physics_tick(){
+	private boolean physics_tick(){
 		
 		
-		return 0;
+		return false;
 		
 	}
 	
-	private int render_tick(){
+	private boolean render_tick(){
 		
 	
-		return 0;
+		return false;
 		
 	}
 
