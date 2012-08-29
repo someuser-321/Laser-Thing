@@ -29,8 +29,8 @@ public class Game {
 	
 	public int tick(){
 		
-		if (input_tick(gameView.touch) | physics_tick() | render_tick())
-			return 1;
+		//if (input_tick(gameView.touch) | physics_tick() | render_tick())
+		//	return 1;
 		
 		return 0;
 	}
@@ -39,7 +39,7 @@ public class Game {
 		
 		for ( Button b : buttons){
 			if ( test_intercept(touch, b.x_min, b.x_max, b.y_min, b.y_max) )
-				b.press();
+				b.press(gameView);
 		}
 
 		return false;

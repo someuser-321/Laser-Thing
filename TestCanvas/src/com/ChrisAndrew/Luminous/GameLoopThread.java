@@ -7,7 +7,7 @@ public class GameLoopThread extends Thread {
 	static final long FPS = 30;
 	private GameView view;
 	private Game game;
-	private boolean running = false;
+	public boolean running = false;
 
 	public GameLoopThread(GameView view) {
 		this.view = view;
@@ -24,6 +24,7 @@ public class GameLoopThread extends Thread {
 		long ticksPS = 1000 / FPS;
 		long startTime;
 		long sleepTime;
+		
 		while (running) {
 			Canvas c = null;
 			startTime = System.currentTimeMillis();

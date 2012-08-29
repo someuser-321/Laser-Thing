@@ -12,7 +12,9 @@ public class GameView extends SurfaceView {
 	private SurfaceHolder holder;
 	private GameLoopThread gameLoopThread;
 	
-	public TouchPoint touch;
+	private boolean flag = false;
+	
+	public TouchPoint touch = new TouchPoint();
 
 	
 	public GameView(Context context) {
@@ -37,8 +39,14 @@ public class GameView extends SurfaceView {
 			}
 
 			public void surfaceCreated(SurfaceHolder holder) {
-				gameLoopThread.setRunning(true);
-				gameLoopThread.start();
+				if ( gameLoopThread.running == false && flag == false ){
+					gameLoopThread.setRunning(true);
+					gameLoopThread.start();
+					flag = true;
+				} else if ( gameLoopThread.running == false && flag == true ){
+					gameLoopThread.setRunning(true);
+					gameLoopThread.run();
+				}
 			}
 
 			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -49,13 +57,14 @@ public class GameView extends SurfaceView {
 		bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 		bmp_large = Bitmap.createScaledBitmap(bmp, bmp.getWidth()*2, bmp.getHeight()*2, true);
 
-}
+	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-    	
-		canvas.drawColor(Color.BLACK);
-		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2, null);
+    	if (canvas != null){
+    		canvas.drawColor(Color.BLACK);
+    		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2, null);
+    	}
 
 	}
 	
@@ -76,7 +85,6 @@ public class GameView extends SurfaceView {
 				touch.x = ev.getX();
 				touch.y = ev.getY();
 				touch.down = true;
-				invalidate();
 				break;
 				
 			case MotionEvent.ACTION_UP:
