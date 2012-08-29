@@ -12,9 +12,7 @@ public class GameView extends SurfaceView {
 	private SurfaceHolder holder;
 	private GameLoopThread gameLoopThread;
 	
-	private float touch_x, touch_x_ = 0.0f;
-	private float touch_y, touch_y_ = 0.0f;
-	private boolean touchDown = false;
+	public TouchPoint touch;
 
 	
 	public GameView(Context context) {
@@ -57,7 +55,7 @@ public class GameView extends SurfaceView {
 	protected void onDraw(Canvas canvas) {
     	
 		canvas.drawColor(Color.BLACK);
-		canvas.drawBitmap(bmp_large, touch_x - bmp_large.getWidth()/2, touch_y - bmp_large.getHeight()/2, null);
+		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2, null);
 
 	}
 	
@@ -67,22 +65,22 @@ public class GameView extends SurfaceView {
 		switch ( ev.getAction() & MotionEvent.ACTION_MASK){
 		
 			case MotionEvent.ACTION_DOWN:
-				touch_x = ev.getX();
-				touch_y = ev.getY();
-				touchDown = true;
+				touch.x = ev.getX();
+				touch.y = ev.getY();
+				touch.down = true;
 				break;
 				
 			case MotionEvent.ACTION_MOVE:
-				touch_x_ = touch_x;
-				touch_y_ = touch_y;
-				touch_x = ev.getX();
-				touch_y = ev.getY();
-				touchDown = true;
+				touch.x_ = touch.x;
+				touch.y_ = touch.y;
+				touch.x = ev.getX();
+				touch.y = ev.getY();
+				touch.down = true;
 				invalidate();
 				break;
 				
 			case MotionEvent.ACTION_UP:
-				touchDown = false;
+				touch.down = false;
 				break;
 		
 		}
