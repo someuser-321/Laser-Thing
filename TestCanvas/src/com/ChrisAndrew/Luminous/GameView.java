@@ -15,6 +15,11 @@ public class GameView extends SurfaceView {
 	private boolean flag = false;
 	
 	public TouchPoint touch = new TouchPoint();
+	
+    private Paint myPaint = new Paint(Paint.ANTI_ALIAS_FLAG);  
+    private Typeface mFace;
+    
+    int colour = 0;
 
 	
 	public GameView(Context context) {
@@ -54,16 +59,32 @@ public class GameView extends SurfaceView {
 
 		});
 
-		bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
-		bmp_large = Bitmap.createScaledBitmap(bmp, bmp.getWidth()*2, bmp.getHeight()*2, true);
+		bmp = BitmapFactory.decodeResource(getResources(), R.drawable.button_/*ic_launcher*/);
+		bmp_large = Bitmap.createScaledBitmap(bmp, bmp.getWidth()*3/2, bmp.getHeight()*3/2, true);
+		
+		mFace = Typeface.createFromAsset(getContext().getAssets(), "fonts/laserfont.ttf");  
+		myPaint.setTextSize(32);
+		myPaint.setARGB(255, 255, 200, 200);
+		myPaint.setTypeface(mFace);
 
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
     	if (canvas != null){
+    		if ( colour < 255 ){
+    			colour += 32;
+    		} else {
+    			colour = 0;
+    		}
     		canvas.drawColor(Color.BLACK);
     		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2, null);
+    		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2 + 1*(bmp_large.getHeight()/4 + 32), null);
+    		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2 + 2*(bmp_large.getHeight()/4 + 32), null);
+    		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2 + 3*(bmp_large.getHeight()/4 + 32), null);
+    		
+    		myPaint.setARGB(255, colour, colour, 255-colour);
+        	canvas.drawText("BACON!!!", touch.x - 64, touch.y, myPaint);
     	}
 
 	}
@@ -95,5 +116,14 @@ public class GameView extends SurfaceView {
 		
 		return true;
 	}
+	
+	public boolean changeview(int action){
+		
+		
+		
+		return true;
+		
+	}
+
 	
 }

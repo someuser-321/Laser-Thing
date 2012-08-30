@@ -7,11 +7,11 @@ public class Button {
 	public float x_min, x_max;
 	public float y_min, y_max;
 	
-	Action action;
+	int action;
 	
 	Bitmap normal, pressed;
 	
-	public Button(float x_min_, float y_min_, float x_max_, float y_max_, Action action_, Bitmap button_bmp, Bitmap pressed_bmp){
+	public Button(float x_min_, float y_min_, float x_max_, float y_max_, int action_, Bitmap button_bmp, Bitmap pressed_bmp){
 		
 		x_min = x_min_;
 		y_min = y_min_;
@@ -33,9 +33,11 @@ public class Button {
 		
 	}
 	
-	public Action press(GameView view){ 
+	public int press(GameView view){ 
 		
 		toggleimage();
+		
+		view.changeview(action);
 		
 		return action;
 		

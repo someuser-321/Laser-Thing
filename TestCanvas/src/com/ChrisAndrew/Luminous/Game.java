@@ -8,8 +8,7 @@ public class Game {
 	
 	private GameView gameView;
 	private Button[] buttons;
-	private Bitmap bmp_button;
-	private Bitmap bmp_mirror;
+	private Bitmap bmp_button, bmp_mirror, bmp_prism, bmp_rope, bmp_lightbulb;
 	
 	public Game(GameView view){
 		this.gameView = view;
@@ -21,7 +20,10 @@ public class Game {
 		boolean success = true;
 		
 		//bmp_button = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.button);
-		//bmp_mirror = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.mirror);
+		bmp_mirror = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.mirror);
+		bmp_lightbulb = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.lightbulb);
+		bmp_prism = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.prism);
+		bmp_rope = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.rope);
 		
 		
 		return success;

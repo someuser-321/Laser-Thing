@@ -19,10 +19,10 @@ public class MainActivity extends Activity {
 
 	}
 
-	@Override
+	/*@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
-	}
+	}*/
 
 }
