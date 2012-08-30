@@ -4,6 +4,7 @@ import com.ChrisAndrew.Luminous.R;
 
 import android.content.Context;
 import android.graphics.*;
+import android.graphics.Paint.Align;
 import android.view.*;
 
 public class GameView extends SurfaceView {
@@ -19,7 +20,9 @@ public class GameView extends SurfaceView {
     private Paint myPaint = new Paint(Paint.ANTI_ALIAS_FLAG);  
     private Typeface mFace;
     
-    int colour = 0;
+    private int colour = 0;
+    
+    private String text = "BACON!!!";
 
 	
 	public GameView(Context context) {
@@ -63,9 +66,10 @@ public class GameView extends SurfaceView {
 		bmp_large = Bitmap.createScaledBitmap(bmp, bmp.getWidth()*3/2, bmp.getHeight()*3/2, true);
 		
 		mFace = Typeface.createFromAsset(getContext().getAssets(), "fonts/laserfont.ttf");  
-		myPaint.setTextSize(32);
+		myPaint.setTextSize(64);
 		myPaint.setARGB(255, 255, 200, 200);
 		myPaint.setTypeface(mFace);
+		myPaint.setTextAlign(Align.CENTER);
 
 	}
 
@@ -78,13 +82,18 @@ public class GameView extends SurfaceView {
     			colour = 0;
     		}
     		canvas.drawColor(Color.BLACK);
-    		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2, null);
-    		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2 + 1*(bmp_large.getHeight()/4 + 32), null);
-    		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2 + 2*(bmp_large.getHeight()/4 + 32), null);
-    		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2 + 3*(bmp_large.getHeight()/4 + 32), null);
-    		
     		myPaint.setARGB(255, colour, colour, 255-colour);
-        	canvas.drawText("BACON!!!", touch.x - 64, touch.y, myPaint);
+    		
+    		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2, null);
+    		canvas.drawText(text, touch.x, touch.y, myPaint);
+    		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2 + 1*(bmp_large.getHeight()/4 + 32), null);
+    		canvas.drawText(text, touch.x, touch.y + 1*(bmp_large.getHeight()/4 + 32), myPaint);
+    		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2 + 2*(bmp_large.getHeight()/4 + 32), null);
+    		canvas.drawText(text, touch.x, touch.y + 2*(bmp_large.getHeight()/4 + 32), myPaint);
+    		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2 + 3*(bmp_large.getHeight()/4 + 32), null);
+    		canvas.drawText(text, touch.x, touch.y + 3*(bmp_large.getHeight()/4 + 32), myPaint);
+    		
+        	
     	}
 
 	}
