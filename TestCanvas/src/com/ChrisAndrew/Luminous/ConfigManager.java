@@ -40,10 +40,10 @@ public class ConfigManager {
 		try {
 			
 			InputStream input = assets.open(configfile);
-			int sz = input.available();
+			/*int sz = input.available();
 			byte[] buffer = new byte[sz];
 			input.read(buffer);
-			input.close();
+			input.close();*/
 			
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db;

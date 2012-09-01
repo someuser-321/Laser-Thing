@@ -6,12 +6,12 @@ public class Button {
 
 	public float x_min, x_max;
 	public float y_min, y_max;
-	int action;
+	String action;
 	
 	Bitmap normal, pressed;
 	
 	
-	public Button(float x_min_, float y_min_, float x_max_, float y_max_, int action_, Bitmap button_bmp, Bitmap pressed_bmp){
+	public Button(float x_min_, float y_min_, float x_max_, float y_max_, String action_, Bitmap button_bmp, Bitmap pressed_bmp){
 		
 		x_min = x_min_;
 		y_min = y_min_;
@@ -33,14 +33,12 @@ public class Button {
 		
 	}
 	
-	public int press(GameView view){ 
+	public boolean press(GameView view){ 
 		
 		toggleimage();
 		
-		view.changescreen(action);
-		
-		return action;
-		
+		return view.changeScreen(action);
+
 	}
 
 	

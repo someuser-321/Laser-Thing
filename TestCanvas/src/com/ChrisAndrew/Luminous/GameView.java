@@ -24,7 +24,7 @@ public class GameView extends SurfaceView {
     private int colour = 0;
     private String text = "BACON!!!";
     
-    public ConfigManager config = new ConfigManager(this);
+    public ConfigManager config;
 
 	
 	public GameView(Context context_) {
@@ -33,6 +33,7 @@ public class GameView extends SurfaceView {
 		
 		context = context_;	
 		
+		config = new ConfigManager(this);		
 		gameLoopThread = new GameLoopThread(this);
 		holder = getHolder();
 		holder.addCallback(new SurfaceHolder.Callback() {
@@ -68,7 +69,7 @@ public class GameView extends SurfaceView {
 		});
 
 		try {
-			bmp = BitmapFactory.decodeStream(context.getAssets().open("ic_launcher"));
+			bmp = BitmapFactory.decodeStream(context.getAssets().open("images/lightbulb.png"));
 		} catch (IOException e) {}
 		
 		bmp_large = Bitmap.createScaledBitmap(bmp, bmp.getWidth()/2, bmp.getHeight()/2, true);
@@ -137,7 +138,7 @@ public class GameView extends SurfaceView {
 		return true;
 	}
 	
-	public boolean changescreen(int action){
+	public boolean changeScreen(String action){
 		
 		try {
 			Thread.sleep(200);

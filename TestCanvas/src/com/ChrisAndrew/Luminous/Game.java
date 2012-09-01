@@ -24,7 +24,7 @@ public class Game {
 		bmp_button = gameView.config.bmp_button;
 		bmp_button_ = gameView.config.bmp_button_;
 		
-		btn_play = new Button(400, 800, 400, 500, 0, bmp_button, bmp_button_);
+		btn_play = new Button(400, 800, 400, 500, "menu", bmp_button, bmp_button_);
 		
 		buttons[0] = btn_play;
 		
