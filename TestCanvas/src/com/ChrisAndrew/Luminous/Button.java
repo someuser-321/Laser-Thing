@@ -6,10 +6,10 @@ public class Button {
 
 	public float x_min, x_max;
 	public float y_min, y_max;
-	
 	int action;
 	
 	Bitmap normal, pressed;
+	
 	
 	public Button(float x_min_, float y_min_, float x_max_, float y_max_, int action_, Bitmap button_bmp, Bitmap pressed_bmp){
 		
@@ -37,7 +37,7 @@ public class Button {
 		
 		toggleimage();
 		
-		view.changeview(action);
+		view.changescreen(action);
 		
 		return action;
 		

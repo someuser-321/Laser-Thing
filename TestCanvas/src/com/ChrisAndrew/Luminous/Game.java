@@ -21,12 +21,12 @@ public class Game {
 		
 		boolean success = true;
 		
-		bmp_button = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.button);
+		/*bmp_button = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.button);
 		bmp_button_ = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.button_);
 		bmp_mirror = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.mirror);
 		bmp_lightbulb = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.lightbulb);
 		bmp_prism = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.prism);
-		bmp_rope = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.rope);
+		bmp_rope = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.rope);*/
 		
 		btn_play = new Button(400, 800, 400, 500, 0, bmp_button, bmp_button);
 		

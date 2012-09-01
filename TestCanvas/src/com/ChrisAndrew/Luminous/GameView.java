@@ -1,5 +1,7 @@
 package com.ChrisAndrew.Luminous;
 
+import java.io.IOException;
+
 import com.ChrisAndrew.Luminous.R;
 
 import android.content.Context;
@@ -14,17 +16,24 @@ public class GameView extends SurfaceView {
 	private GameLoopThread gameLoopThread;
 	private boolean flag = false;
 	
+	public Context context;
+	
 	public TouchPoint touch = new TouchPoint();
 	
     private Paint myPaint = new Paint(Paint.ANTI_ALIAS_FLAG);  
     private Typeface mFace;
     private int colour = 0;
     private String text = "BACON!!!";
+    
+    public ConfigManager config = new ConfigManager(this);
 
 	
-	public GameView(Context context) {
+	public GameView(Context context_) {
 	
-		super(context);
+		super(context_);
+		
+		context = context_;	
+		
 		gameLoopThread = new GameLoopThread(this);
 		holder = getHolder();
 		holder.addCallback(new SurfaceHolder.Callback() {
@@ -59,7 +68,10 @@ public class GameView extends SurfaceView {
 
 		});
 
-		bmp = BitmapFactory.decodeResource(getResources(), R.drawable.button);
+		try {
+			bmp = BitmapFactory.decodeStream(context.getAssets().open("ic_launcher"));
+		} catch (IOException e) {}
+		
 		bmp_large = Bitmap.createScaledBitmap(bmp, bmp.getWidth()/2, bmp.getHeight()/2, true);
 		
 		mFace = Typeface.createFromAsset(getContext().getAssets(), "fonts/laserfont.ttf");  
@@ -126,13 +138,15 @@ public class GameView extends SurfaceView {
 		return true;
 	}
 	
-	public boolean changeview(int action){
+	public boolean changescreen(int action){
 		
 		try {
 			Thread.sleep(200);
 		} catch (Exception e) {
 			
 		}
+		
+		
 		
 		//change current view
 		

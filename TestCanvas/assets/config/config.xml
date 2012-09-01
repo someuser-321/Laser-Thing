@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<screens>
+    
+    <screen>
+        <button img="button" img_pressed="button_" action="">
+        <button img="" img_pressed="" action="">
+        <button img="" img_pressed="" action="">
+    </screen>
+    
+</screens>
+</xml>
