@@ -3,8 +3,8 @@
     
     <screen name="menu">
         <button x="400" y="200" width="200" height="50" img="button.png" img_pressed="button_.png" screen="levels">
-        <button x="400" y="300" width="200" height="50" img="button.png" img_pressed="button_.png" action="options">
-        <button x="400" y="400" width="200" height="50" img="button.png" img_pressed="button_.png" action="help">
+        <button x="400" y="300" width="200" height="50" img="button.png" img_pressed="button_.png" screen="options">
+        <button x="400" y="400" width="200" height="50" img="button.png" img_pressed="button_.png" screen="help">
     </screen>
     
     <screen name="levels">
@@ -21,15 +21,9 @@
     
     <screen name="help">
         <button x="50" y="50" width="50" height="50" img="back.png" img_pressed="back_.png" screen="menu">
-        <text x="50" y="150">
-            To play the game, reflect light from the source into the receiver.
-        </text>
-        <text x="50" y="190">
-            It must receive over a certain amount of light for the level to complete.
-        </text>
-        <text>
-            Have fun!
-        </text>
+        <text x="50" y="150">To play the game, reflect light from the source into the receiver.</text>
+        <text x="50" y="190">It must receive over a certain amount of light for the level to complete.</text>
+        <text x="50" y="230">Have fun!</text>
     </screen>
     
 </screens>
