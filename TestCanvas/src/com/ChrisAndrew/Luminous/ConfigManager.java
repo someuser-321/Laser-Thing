@@ -1,6 +1,6 @@
 package com.ChrisAndrew.Luminous;
 
-import java.util.*;
+//import java.util.*;
 import java.io.*;
 
 import android.content.res.AssetManager;
@@ -10,7 +10,7 @@ import android.graphics.BitmapFactory;
 
 public class ConfigManager {
 
-	private String configlocation = "config/config.xml";
+	//private String configlocation = "config/config.xml";
 	
 	public Bitmap bmp_button;
 	public Bitmap bmp_button_;
@@ -19,7 +19,6 @@ public class ConfigManager {
 	public Bitmap bmp_prism;
 	public Bitmap bmp_rope;
 
-	
 	
 	public ConfigManager(GameView view){
 		

@@ -2,12 +2,11 @@ package com.ChrisAndrew.Luminous;
 
 import java.io.IOException;
 
-import com.ChrisAndrew.Luminous.R;
-
 import android.content.Context;
 import android.graphics.*;
 import android.graphics.Paint.Align;
 import android.view.*;
+
 
 public class GameView extends SurfaceView {
 	
@@ -74,7 +73,7 @@ public class GameView extends SurfaceView {
 		
 		bmp_large = Bitmap.createScaledBitmap(bmp, bmp.getWidth()/2, bmp.getHeight()/2, true);
 		
-		mFace = Typeface.createFromAsset(getContext().getAssets(), "fonts/laserfont.ttf");  
+		mFace = Typeface.createFromAsset(context.getAssets(), "fonts/laserfont.ttf");  
 		myPaint.setTextSize(64);
 		myPaint.setARGB(255, 255, 200, 200);
 		myPaint.setTypeface(mFace);
@@ -145,10 +144,6 @@ public class GameView extends SurfaceView {
 		} catch (Exception e) {
 			
 		}
-		
-		
-		
-		//change current view
 		
 		
 		return true;

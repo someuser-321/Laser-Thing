@@ -1,14 +1,13 @@
 package com.ChrisAndrew.Luminous;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 
 public class Game {
 	
 	private GameView gameView;
-	private Button btn_play, btn_options, btn_help;
-	private Bitmap bmp_button, bmp_button_, bmp_mirror, bmp_prism, bmp_rope, bmp_lightbulb;
+	private Button btn_play;//, btn_options, btn_help;
+	private Bitmap bmp_button, bmp_button_;//, bmp_mirror, bmp_prism, bmp_rope, bmp_lightbulb;
 	private Button[] buttons = new Button[4];
 	
 	
@@ -21,14 +20,11 @@ public class Game {
 		
 		boolean success = true;
 		
-		/*bmp_button = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.button);
-		bmp_button_ = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.button_);
-		bmp_mirror = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.mirror);
-		bmp_lightbulb = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.lightbulb);
-		bmp_prism = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.prism);
-		bmp_rope = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.rope);*/
 		
-		btn_play = new Button(400, 800, 400, 500, 0, bmp_button, bmp_button);
+		bmp_button = gameView.config.bmp_button;
+		bmp_button_ = gameView.config.bmp_button_;
+		
+		btn_play = new Button(400, 800, 400, 500, 0, bmp_button, bmp_button_);
 		
 		buttons[0] = btn_play;
 		
