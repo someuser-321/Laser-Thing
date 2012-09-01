@@ -12,16 +12,13 @@ public class GameView extends SurfaceView {
 	private Bitmap bmp, bmp_large;
 	private SurfaceHolder holder;
 	private GameLoopThread gameLoopThread;
-	
 	private boolean flag = false;
 	
 	public TouchPoint touch = new TouchPoint();
 	
     private Paint myPaint = new Paint(Paint.ANTI_ALIAS_FLAG);  
     private Typeface mFace;
-    
     private int colour = 0;
-    
     private String text = "BACON!!!";
 
 	
@@ -62,8 +59,8 @@ public class GameView extends SurfaceView {
 
 		});
 
-		bmp = BitmapFactory.decodeResource(getResources(), R.drawable.button_/*ic_launcher*/);
-		bmp_large = Bitmap.createScaledBitmap(bmp, bmp.getWidth()*3/2, bmp.getHeight()*3/2, true);
+		bmp = BitmapFactory.decodeResource(getResources(), R.drawable.button);
+		bmp_large = Bitmap.createScaledBitmap(bmp, bmp.getWidth()/2, bmp.getHeight()/2, true);
 		
 		mFace = Typeface.createFromAsset(getContext().getAssets(), "fonts/laserfont.ttf");  
 		myPaint.setTextSize(64);
@@ -76,6 +73,9 @@ public class GameView extends SurfaceView {
 	@Override
 	protected void onDraw(Canvas canvas) {
     	if (canvas != null){
+    		
+    		
+    		
     		if ( colour < 255 ){
     			colour += 32;
     		} else {
@@ -128,6 +128,13 @@ public class GameView extends SurfaceView {
 	
 	public boolean changeview(int action){
 		
+		try {
+			Thread.sleep(200);
+		} catch (Exception e) {
+			
+		}
+		
+		//change current view
 		
 		
 		return true;
