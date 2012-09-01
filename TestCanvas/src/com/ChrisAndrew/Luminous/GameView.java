@@ -1,5 +1,6 @@
 package com.ChrisAndrew.Luminous;
 
+
 import java.io.IOException;
 
 import android.content.Context;
@@ -21,7 +22,6 @@ public class GameView extends SurfaceView {
 	
     private Paint myPaint = new Paint(Paint.ANTI_ALIAS_FLAG);  
     private Typeface mFace;
-    private int colour = 0;
     private String text = "BACON!!!";
     
     public ConfigManager config;
@@ -39,7 +39,6 @@ public class GameView extends SurfaceView {
 		holder.addCallback(new SurfaceHolder.Callback() {
 
 			public void surfaceDestroyed(SurfaceHolder holder) {
-				
 				boolean retry = true;
 				gameLoopThread.setRunning(false);
 				while (retry) {
@@ -63,8 +62,7 @@ public class GameView extends SurfaceView {
 				}
 			}
 
-			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-			}
+			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
 
 		});
 
@@ -84,27 +82,13 @@ public class GameView extends SurfaceView {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
+		
     	if (canvas != null){
     		
-    		
-    		
-    		if ( colour < 255 ){
-    			colour += 32;
-    		} else {
-    			colour = 0;
-    		}
-    		canvas.drawColor(Color.BLACK);
-    		myPaint.setARGB(255, colour, colour, 255-colour);
+    		canvas.drawColor(Color.DKGRAY);
     		
     		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2, null);
-    		canvas.drawText(text, touch.x, touch.y, myPaint);
-    		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2 + 1*(bmp_large.getHeight()/4 + 32), null);
-    		canvas.drawText(text, touch.x, touch.y + 1*(bmp_large.getHeight()/4 + 32), myPaint);
-    		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2 + 2*(bmp_large.getHeight()/4 + 32), null);
-    		canvas.drawText(text, touch.x, touch.y + 2*(bmp_large.getHeight()/4 + 32), myPaint);
-    		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2 + 3*(bmp_large.getHeight()/4 + 32), null);
-    		canvas.drawText(text, touch.x, touch.y + 3*(bmp_large.getHeight()/4 + 32), myPaint);
-    		
+    		canvas.drawText(text, touch.x, touch.y + 128, myPaint);
         	
     	}
 
@@ -148,7 +132,6 @@ public class GameView extends SurfaceView {
 		
 		
 		return true;
-		
 	}
 
 	

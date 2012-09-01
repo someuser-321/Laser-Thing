@@ -21,9 +21,9 @@
     
     <screen name="help">
         <button x="50" y="50" width="50" height="50" img="back.png" img_pressed="back_.png" screen="menu">
-        <text x="50" y="150">To play the game, reflect light from the source into the receiver.</text>
-        <text x="50" y="190">It must receive over a certain amount of light for the level to complete.</text>
-        <text x="50" y="230">Have fun!</text>
+        <text x="50" y="150" align="left">To play the game, reflect light from the source into the receiver.</text>
+        <text x="50" y="190" align="left">It must receive over a certain amount of light for the level to complete.</text>
+        <text x="50" y="230" align="left">Have fun!</text>
     </screen>
     
 </screens>

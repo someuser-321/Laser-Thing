@@ -40,19 +40,15 @@ public class ConfigManager {
 		try {
 			
 			InputStream input = assets.open(configfile);
-			/*int sz = input.available();
-			byte[] buffer = new byte[sz];
-			input.read(buffer);
-			input.close();*/
 			
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db;
+			
 			try {
 				db = dbf.newDocumentBuilder();
 				doc = db.parse(input);
 			} catch (ParserConfigurationException e) {
-			} catch (SAXException e) {
-			}
+			} catch (SAXException e) {}
 			
 			bmp_button = BitmapFactory.decodeStream(assets.open("images/button.png"));
 			bmp_button_ = BitmapFactory.decodeStream(assets.open("images/button_.png"));
@@ -85,7 +81,6 @@ public class ConfigManager {
 		}
 		
 		return root;
-		
 	}
 	
 	public Node getButtonNodes(NodeList screen){
@@ -100,7 +95,6 @@ public class ConfigManager {
 		}
 		
 		return root;
-		
 	}
 	
 	public String getNodeAttribute(String name, Node node){
@@ -116,7 +110,6 @@ public class ConfigManager {
 		}
 		
 		return ret;
-		
 	}
 	
 }

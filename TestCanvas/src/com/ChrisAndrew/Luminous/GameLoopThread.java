@@ -1,6 +1,8 @@
 package com.ChrisAndrew.Luminous;
 
+
 import android.graphics.Canvas;
+
 
 public class GameLoopThread extends Thread {
 	
@@ -9,6 +11,7 @@ public class GameLoopThread extends Thread {
 	private Game game;
 	public boolean running = false;
 
+	
 	public GameLoopThread(GameView view) {
 		this.view = view;
 		this.game = new Game(view);
@@ -48,6 +51,7 @@ public class GameLoopThread extends Thread {
 				} catch (Exception e) {}
 			}
 		}
+		
 	}
 	
 }

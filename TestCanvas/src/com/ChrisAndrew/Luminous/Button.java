@@ -38,7 +38,6 @@ public class Button {
 		toggleimage();
 		
 		return view.changeScreen(action);
-
 	}
 
 	

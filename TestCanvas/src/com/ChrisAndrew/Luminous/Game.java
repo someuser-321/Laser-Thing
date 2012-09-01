@@ -1,5 +1,6 @@
 package com.ChrisAndrew.Luminous;
 
+
 import android.graphics.Bitmap;
 
 
@@ -49,21 +50,18 @@ public class Game {
 		}
 
 		return false;
-		
 	}
 	
 	private boolean physics_tick(){
 		
 		
 		return false;
-		
 	}
 	
 	private boolean render_tick(){
 		
 	
 		return false;
-		
 	}
 
 	private boolean test_intercept(TouchPoint touchpoint, float x_min, float x_max, float y_min, float y_max){
@@ -72,7 +70,6 @@ public class Game {
 			return true;
 
 		return false;
-		
 	}
 
 }
