@@ -25,8 +25,8 @@ public class GameView extends SurfaceView {
 	
     private Paint myPaint = new Paint(Paint.ANTI_ALIAS_FLAG);  
     private Typeface mFace;
-    private String text = "BACON!!!";
     public Button[] buttons;
+    private String[] text;
     
     public ConfigManager config;
 
@@ -35,9 +35,8 @@ public class GameView extends SurfaceView {
 	
 		super(context_);
 		
-		context = context_;	
+		context = context_;
 		
-		config = new ConfigManager(this);		
 		gameLoopThread = new GameLoopThread(this);
 		holder = getHolder();
 		holder.addCallback(new SurfaceHolder.Callback() {
@@ -68,7 +67,8 @@ public class GameView extends SurfaceView {
 
 			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
 
-		});
+			}
+		);
 
 		try {
 			bmp = BitmapFactory.decodeStream(context.getAssets().open("images/lightbulb.png"));
@@ -77,10 +77,14 @@ public class GameView extends SurfaceView {
 		bmp_large = Bitmap.createScaledBitmap(bmp, bmp.getWidth()/2, bmp.getHeight()/2, true);
 		
 		mFace = Typeface.createFromAsset(context.getAssets(), "fonts/laserfont.ttf");  
-		myPaint.setTextSize(64);
+		myPaint.setTextSize(32);
 		myPaint.setARGB(255, 255, 200, 200);
 		myPaint.setTypeface(mFace);
 		myPaint.setTextAlign(Align.CENTER);
+
+		
+		config = new ConfigManager(this);
+		changeScreen("menu");
 
 	}
 
@@ -89,16 +93,13 @@ public class GameView extends SurfaceView {
 		
     	if (canvas != null){
     		
-    		
+    		canvas.drawColor(Color.BLACK);
     		for ( int i=0 ; i<buttons.length ; i++ ){
     			canvas.drawBitmap(buttons[i].normal, buttons[i].x_min, buttons[i].y_min, null);
+    			canvas.drawText(buttons[i].text, (buttons[i].x_min + buttons[i].x_max)/2, (buttons[i].y_min + buttons[i].y_max)/2+12, myPaint);
     		}
     		
-    		canvas.drawColor(Color.DKGRAY);
-    		
-    		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2, null);
-    		canvas.drawText(text, touch.x, touch.y + 128, myPaint);
-        	
+
     	}
 
 	}
@@ -133,12 +134,6 @@ public class GameView extends SurfaceView {
 	
 	public boolean changeScreen(String action){
 		
-		try {
-			Thread.sleep(200);
-		} catch (Exception e) {
-			return false;
-		}
-		
 		Node screen = config.getScreen(action);
 		Node buttons_ = config.getButtonNodes(screen);
 		
@@ -150,11 +145,16 @@ public class GameView extends SurfaceView {
 			int y = Integer.parseInt(config.getNodeAttribute("y", curButton));
 			int width = Integer.parseInt(config.getNodeAttribute("width", curButton));
 			int height = Integer.parseInt(config.getNodeAttribute("height", curButton));
+			
+			buttons[i] = new Button();
+			
 			buttons[i].x_min = x;
 			buttons[i].x_max = x + width;
 			buttons[i].y_min = y;
 			buttons[i].y_max = y + height;
 			buttons[i].action = config.getNodeAttribute("screen", curButton);
+			buttons[i].text = config.getNodeAttribute("text", curButton);
+			
 			try {
 				buttons[i].normal = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(context.getAssets().open(config.getNodeAttribute("img", curButton))), width, height, false);
 				buttons[i].pressed = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(context.getAssets().open(config.getNodeAttribute("img_pressed", curButton))), width, height, false);

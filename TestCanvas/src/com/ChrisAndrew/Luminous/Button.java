@@ -7,6 +7,7 @@ public class Button {
 	public int x_min, x_max;
 	public int y_min, y_max;
 	String action;
+	String text;
 	Bitmap normal, pressed;
 	
 	

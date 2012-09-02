@@ -23,13 +23,6 @@ public class ConfigManager {
 
 	private String configfile = "config/config.xml";
 	
-	public Bitmap bmp_button;
-	public Bitmap bmp_button_;
-	public Bitmap bmp_mirror;
-	public Bitmap bmp_lightbulb;
-	public Bitmap bmp_prism;
-	public Bitmap bmp_rope;
-	
 	private Document doc;
 
 	
@@ -40,45 +33,79 @@ public class ConfigManager {
 		try {
 			
 			InputStream input = assets.open(configfile);
+			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			doc = db.parse(input);
 			
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db;
-			
-			try {
-				db = dbf.newDocumentBuilder();
-				doc = db.parse(input);
-			} catch (ParserConfigurationException e) {
-			} catch (SAXException e) {}
-			
-			bmp_button = BitmapFactory.decodeStream(assets.open("images/button.png"));
-			bmp_button_ = BitmapFactory.decodeStream(assets.open("images/button_.png"));
-			bmp_mirror = BitmapFactory.decodeStream(assets.open("images/mirror.png"));
-			bmp_lightbulb = BitmapFactory.decodeStream(assets.open("images/lightbulb.png"));
-			bmp_prism = BitmapFactory.decodeStream(assets.open("images/prism.png"));
-			bmp_rope = BitmapFactory.decodeStream(assets.open("images/rope.png"));
-			
-		} catch (IOException e) {
+		} catch (ParserConfigurationException e) { System.out.println("ParserConfigurationException");
+		} catch (SAXException e) {System.out.println("SAXException");
+		} catch (IOException e) {System.out.println("IOException");
 		}
 	
 	}
 	
 	public Node getScreen(String name){
-		
-		NodeList nodes = doc.getElementsByTagName("screens");
+
+		NodeList screens = doc.getElementsByTagName("screens").item(0).getChildNodes();
 		Node ret = null;
 		
-		for ( int i=0 ; i<nodes.getLength() ; i++ ){
-			if ( nodes.item(i).getNodeName() == name )
-				ret = nodes.item(i);
+		for ( int i=0 ; i<screens.getLength() ; i++ ){
+			if ( screens.item(i) != null ){
+				if ( getNodeAttribute("name", screens.item(i)).equals(name) ){
+					//System.out.println(getNodeAttribute("name", screens.item(i)));
+					ret = screens.item(i);
+				}
+			}
 		}
 		
+		//if ( ret == null )
+		//	System.out.println("screen is null");
+		//else
+		//	System.out.println("screen is not null");
 		return ret;
+	}
+	
+	public String getNodeAttribute(String name, Node node){
+		
+		String ret = "poop";
+		NamedNodeMap attributes = node.getAttributes();
+
+		if ( attributes != null ){
+			for ( int i=0; i<attributes.getLength(); i++ ){
+				Node attribute = attributes.item(i);
+				//System.out.println(name + ": " + attribute.getNodeName() + " = " + attribute.getNodeValue());
+				if ( attribute.getNodeName().equals(name) ){
+					ret = attribute.getNodeValue();
+				}
+			}
+		}
+		
+		//if ( ret != null )
+		//	System.out.println(ret);
+		return ret;
+	}
+	
+	public Node getButtonNodes(Node screen_){
+		
+		NodeList screen = screen_.getChildNodes();
+		Element root = doc.createElement("buttons");
+		
+		for ( int i=0 ; i<screen.getLength() ; i++ ){
+			if ( screen.item(i) != null ){
+				if ( screen.item(i).getNodeName().equals("button") ){
+					System.out.println("button");
+					root.appendChild(screen.item(i));
+				}
+			}
+		}
+
+		
+		return root;
 	}
 	
 	public Node getTextNodes(Node screen_){
 		
 		NodeList screen = screen_.getChildNodes();
-		Node root = screen.item(0);
+		Element root = doc.createElement("buttons");
 		
 		for ( int i=0 ; i<screen.getLength() ; i++ ){
 			Element e = (Element)screen.item(i);
@@ -89,35 +116,5 @@ public class ConfigManager {
 		
 		return root;
 	}
-	
-	public Node getButtonNodes(Node screen_){
-		
-		NodeList screen = screen_.getChildNodes();
-		Node root = screen.item(0);
-		
-		for ( int i=0 ; i<screen.getLength() ; i++ ){
-			Element e = (Element)screen.item(i);
-			if ( e.getTagName() == "button" ){
-				root.appendChild(e);
-			}
-		}
-		
-		return root;
-	}
-	
-	public String getNodeAttribute(String name, Node node){
-		
-		String ret = null;
-		NamedNodeMap attributes = node.getAttributes();
-		
-		for (int i = 0; i < attributes.getLength(); i++ ) {
-			Node attribute = attributes.item(i);
-			if ( attribute.getNodeName() == name ) {
-					ret = attribute.getNodeValue();
-			}
-		}
-		
-		return ret;
-	}
-	
+
 }
