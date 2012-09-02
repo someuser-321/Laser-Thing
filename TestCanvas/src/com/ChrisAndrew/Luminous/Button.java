@@ -8,6 +8,7 @@ public class Button {
 	public int y_min, y_max;
 	String action;
 	String text;
+	float textsize;
 	Bitmap normal, pressed;
 	
 	

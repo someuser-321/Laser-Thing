@@ -44,7 +44,7 @@ public class Game {
 
 	private boolean test_intercept(TouchPoint touchpoint, float x_min, float x_max, float y_min, float y_max){
 		
-		if (x_min < touchpoint.x && touchpoint.x < x_max && y_min < touchpoint.y && touchpoint.y < y_max)
+		if (x_min < touchpoint.x && touchpoint.x < x_max && y_min < touchpoint.y && touchpoint.y < y_max && touchpoint.down == false )
 			return true;
 
 		return false;

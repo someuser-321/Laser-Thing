@@ -78,9 +78,10 @@ public class GameView extends SurfaceView {
 		
 		mFace = Typeface.createFromAsset(context.getAssets(), "fonts/laserfont.ttf");  
 		myPaint.setTextSize(32);
-		myPaint.setARGB(255, 255, 200, 200);
+		myPaint.setARGB(255, 255, 255, 255);
 		myPaint.setTypeface(mFace);
 		myPaint.setTextAlign(Align.CENTER);
+		myPaint.setAntiAlias(true);
 
 		
 		config = new ConfigManager(this);
@@ -96,7 +97,8 @@ public class GameView extends SurfaceView {
     		canvas.drawColor(Color.BLACK);
     		for ( int i=0 ; i<buttons.length ; i++ ){
     			canvas.drawBitmap(buttons[i].normal, buttons[i].x_min, buttons[i].y_min, null);
-    			canvas.drawText(buttons[i].text, (buttons[i].x_min + buttons[i].x_max)/2, (buttons[i].y_min + buttons[i].y_max)/2+12, myPaint);
+    			myPaint.setTextSize(buttons[i].textsize);
+    			canvas.drawText(buttons[i].text, (buttons[i].x_min + buttons[i].x_max)/2, (buttons[i].y_min + buttons[i].y_max)/2+16, myPaint);
     		}
     		
 
@@ -154,6 +156,9 @@ public class GameView extends SurfaceView {
 			buttons[i].y_max = y + height;
 			buttons[i].action = config.getNodeAttribute("screen", curButton);
 			buttons[i].text = config.getNodeAttribute("text", curButton);
+			buttons[i].textsize = 16;
+			if ( config.getNodeAttribute("textsize", curButton) != null )
+				buttons[i].textsize = Float.parseFloat(config.getNodeAttribute("textsize", curButton));
 			
 			try {
 				buttons[i].normal = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(context.getAssets().open(config.getNodeAttribute("img", curButton))), width, height, false);

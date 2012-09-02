@@ -22,7 +22,6 @@ import android.graphics.BitmapFactory;
 public class ConfigManager {
 
 	private String configfile = "config/config.xml";
-	
 	private Document doc;
 
 	
@@ -51,36 +50,28 @@ public class ConfigManager {
 		for ( int i=0 ; i<screens.getLength() ; i++ ){
 			if ( screens.item(i) != null ){
 				if ( getNodeAttribute("name", screens.item(i)).equals(name) ){
-					//System.out.println(getNodeAttribute("name", screens.item(i)));
 					ret = screens.item(i);
 				}
 			}
 		}
-		
-		//if ( ret == null )
-		//	System.out.println("screen is null");
-		//else
-		//	System.out.println("screen is not null");
+
 		return ret;
 	}
 	
 	public String getNodeAttribute(String name, Node node){
 		
-		String ret = "poop";
+		String ret = "0";
 		NamedNodeMap attributes = node.getAttributes();
 
 		if ( attributes != null ){
 			for ( int i=0; i<attributes.getLength(); i++ ){
 				Node attribute = attributes.item(i);
-				//System.out.println(name + ": " + attribute.getNodeName() + " = " + attribute.getNodeValue());
 				if ( attribute.getNodeName().equals(name) ){
 					ret = attribute.getNodeValue();
 				}
 			}
 		}
-		
-		//if ( ret != null )
-		//	System.out.println(ret);
+
 		return ret;
 	}
 	
@@ -92,12 +83,10 @@ public class ConfigManager {
 		for ( int i=0 ; i<screen.getLength() ; i++ ){
 			if ( screen.item(i) != null ){
 				if ( screen.item(i).getNodeName().equals("button") ){
-					System.out.println("button");
 					root.appendChild(screen.item(i));
 				}
 			}
 		}
-
 		
 		return root;
 	}
@@ -105,12 +94,13 @@ public class ConfigManager {
 	public Node getTextNodes(Node screen_){
 		
 		NodeList screen = screen_.getChildNodes();
-		Element root = doc.createElement("buttons");
+		Element root = doc.createElement("texts");
 		
 		for ( int i=0 ; i<screen.getLength() ; i++ ){
-			Element e = (Element)screen.item(i);
-			if ( e.getTagName() == "text" ){
-				root.appendChild(e);
+			if ( screen.item(i) != null ){
+				if ( screen.item(i).getNodeName().equals("text") ){
+					root.appendChild(screen.item(i));
+				}
 			}
 		}
 		
