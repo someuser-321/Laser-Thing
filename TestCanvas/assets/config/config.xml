@@ -5,6 +5,7 @@
         <button x="500" y="200" width="400" height="100" img="images/button.png" img_pressed="images/button_.png" screen="levels" text="LEVELS" textsize="64"></button>
         <button x="500" y="300" width="400" height="100" img="images/button.png" img_pressed="images/button_.png" screen="options" text="OPTIONS" textsize="64"></button>
         <button x="500" y="400" width="400" height="100" img="images/button.png" img_pressed="images/button_.png" screen="help" text="HELP" textsize="64"></button>
+        <background img="images/tile.png"></background>
     </screen>
     
     <screen name="levels">

@@ -27,6 +27,7 @@ public class GameView extends SurfaceView {
     private Typeface mFace;
     public Button[] buttons;
     private String[] text;
+    private Bitmap background;
     
     public ConfigManager config;
 
@@ -94,13 +95,23 @@ public class GameView extends SurfaceView {
 		
     	if (canvas != null){
     		
-    		canvas.drawColor(Color.BLACK);
+    		canvas.drawColor(Color.WHITE);
+    		
+    		int x = 0, y = 0;
+    		while (x < 64) {
+    		    while (y < 32) {
+    		        canvas.drawBitmap(background, x*background.getWidth()/*+x*/, y*background.getHeight()/*+y*/, null);
+    		        y += 1;
+    		    }
+    		    x += 1;
+    		    y = 0;
+    		}
+
     		for ( int i=0 ; i<buttons.length ; i++ ){
     			canvas.drawBitmap(buttons[i].normal, buttons[i].x_min, buttons[i].y_min, null);
     			myPaint.setTextSize(buttons[i].textsize);
     			canvas.drawText(buttons[i].text, (buttons[i].x_min + buttons[i].x_max)/2, (buttons[i].y_min + buttons[i].y_max)/2+16, myPaint);
-    		}
-    		
+    		}    		
 
     	}
 
@@ -167,6 +178,12 @@ public class GameView extends SurfaceView {
 				return false;
 			}
 		}
+		
+		Node bg = config.getBackgroundNodes(screen).getChildNodes().item(0);
+		
+		try {
+			background = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(context.getAssets().open(config.getNodeAttribute("img", bg))), 64, 64, false);
+		} catch (IOException e) {}
 		
 		
 		return true;

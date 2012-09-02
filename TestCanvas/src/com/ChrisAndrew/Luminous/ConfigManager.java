@@ -106,5 +106,22 @@ public class ConfigManager {
 		
 		return root;
 	}
+	
+	public Node getBackgroundNodes(Node screen_){
+		
+		NodeList screen = screen_.getChildNodes();
+		Element root = doc.createElement("background");
+		
+		for ( int i=0 ; i<screen.getLength() ; i++ ){
+			if ( screen.item(i) != null ){
+				if ( screen.item(i).getNodeName().equals("background") ){
+					root.appendChild(screen.item(i));
+					break;
+				}
+			}
+		}
+		
+		return root;
+	}
 
 }
