@@ -4,10 +4,9 @@ import android.graphics.Bitmap;
 
 public class Button {
 
-	public float x_min, x_max;
-	public float y_min, y_max;
+	public int x_min, x_max;
+	public int y_min, y_max;
 	String action;
-	
 	Bitmap normal, pressed;
 	
 	
@@ -15,7 +14,7 @@ public class Button {
 		
 	}
 	
-	public Button(float x_min_, float y_min_, float x_max_, float y_max_, String action_, Bitmap button_bmp, Bitmap pressed_bmp){
+	public Button(int x_min_, int y_min_, int x_max_, int y_max_, String action_, Bitmap button_bmp, Bitmap pressed_bmp){
 		
 		x_min = x_min_;
 		y_min = y_min_;

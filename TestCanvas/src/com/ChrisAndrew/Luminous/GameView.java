@@ -26,6 +26,7 @@ public class GameView extends SurfaceView {
     private Paint myPaint = new Paint(Paint.ANTI_ALIAS_FLAG);  
     private Typeface mFace;
     private String text = "BACON!!!";
+    public Button[] buttons;
     
     public ConfigManager config;
 
@@ -88,6 +89,11 @@ public class GameView extends SurfaceView {
 		
     	if (canvas != null){
     		
+    		
+    		for ( int i=0 ; i<buttons.length ; i++ ){
+    			canvas.drawBitmap(buttons[i].normal, buttons[i].x_min, buttons[i].y_min, null);
+    		}
+    		
     		canvas.drawColor(Color.DKGRAY);
     		
     		canvas.drawBitmap(bmp_large, touch.x - bmp_large.getWidth()/2, touch.y - bmp_large.getHeight()/2, null);
@@ -136,21 +142,25 @@ public class GameView extends SurfaceView {
 		Node screen = config.getScreen(action);
 		Node buttons_ = config.getButtonNodes(screen);
 		
-		Button[] buttons = new Button[buttons_.getChildNodes().getLength()];
+		buttons = new Button[buttons_.getChildNodes().getLength()];
 		
 		for ( int i=0 ; i<buttons_.getChildNodes().getLength() ; i++){
 			Node curButton = buttons_.getChildNodes().item(i);
-			float x = Float.valueOf(config.getNodeAttribute("x", curButton));
-			float y = Float.valueOf(config.getNodeAttribute("y", curButton));
+			int x = Integer.parseInt(config.getNodeAttribute("x", curButton));
+			int y = Integer.parseInt(config.getNodeAttribute("y", curButton));
+			int width = Integer.parseInt(config.getNodeAttribute("width", curButton));
+			int height = Integer.parseInt(config.getNodeAttribute("height", curButton));
 			buttons[i].x_min = x;
-			buttons[i].x_max = x + Float.valueOf(config.getNodeAttribute("width", curButton));
+			buttons[i].x_max = x + width;
 			buttons[i].y_min = y;
-			buttons[i].y_max = y + Float.valueOf(config.getNodeAttribute("height", curButton));
+			buttons[i].y_max = y + height;
 			buttons[i].action = config.getNodeAttribute("screen", curButton);
 			try {
-				buttons[i].normal = BitmapFactory.decodeStream(context.getAssets().open(config.getNodeAttribute("img", curButton)));
-				buttons[i].pressed = BitmapFactory.decodeStream(context.getAssets().open(config.getNodeAttribute("img_pressed", curButton)));
-			} catch (IOException e) {}
+				buttons[i].normal = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(context.getAssets().open(config.getNodeAttribute("img", curButton))), width, height, false);
+				buttons[i].pressed = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(context.getAssets().open(config.getNodeAttribute("img_pressed", curButton))), width, height, false);
+			} catch (IOException e) {
+				return false;
+			}
 		}
 		
 		
