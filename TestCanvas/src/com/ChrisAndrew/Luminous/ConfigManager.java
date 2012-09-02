@@ -62,15 +62,22 @@ public class ConfigManager {
 	
 	}
 	
-	public NodeList getScreens(){
+	public Node getScreen(String name){
 		
 		NodeList nodes = doc.getElementsByTagName("screens");
+		Node ret = null;
 		
-		return nodes;
+		for ( int i=0 ; i<nodes.getLength() ; i++ ){
+			if ( nodes.item(i).getNodeName() == name )
+				ret = nodes.item(i);
+		}
+		
+		return ret;
 	}
 	
-	public Node getTextNodes(NodeList screen){
+	public Node getTextNodes(Node screen_){
 		
+		NodeList screen = screen_.getChildNodes();
 		Node root = screen.item(0);
 		
 		for ( int i=0 ; i<screen.getLength() ; i++ ){
@@ -83,8 +90,9 @@ public class ConfigManager {
 		return root;
 	}
 	
-	public Node getButtonNodes(NodeList screen){
+	public Node getButtonNodes(Node screen_){
 		
+		NodeList screen = screen_.getChildNodes();
 		Node root = screen.item(0);
 		
 		for ( int i=0 ; i<screen.getLength() ; i++ ){

@@ -2,25 +2,25 @@
 <screens>
     
     <screen name="menu">
-        <button x="400" y="200" width="200" height="50" img="button.png" img_pressed="button_.png" screen="levels">
-        <button x="400" y="300" width="200" height="50" img="button.png" img_pressed="button_.png" screen="options">
-        <button x="400" y="400" width="200" height="50" img="button.png" img_pressed="button_.png" screen="help">
+        <button x="400" y="200" width="200" height="50" img="images/button.png" img_pressed="images/button_.png" screen="levels">
+        <button x="400" y="300" width="200" height="50" img="images/button.png" img_pressed="images/button_.png" screen="options">
+        <button x="400" y="400" width="200" height="50" img="images/button.png" img_pressed="images/button_.png" screen="help">
     </screen>
     
     <screen name="levels">
-        <button x="50" y="50" width="50" height="50" img="back.png" img_pressed="back_.png" screen="menu">
-        <button x="50" y="150" width="100" height="100" img="l1.png" img_pressed="l1_.png" screen="level1">
-        <button x="50" y="300" width="100" height="100" img="l2.png" img_pressed="l2_.png" screen="level2">
-        <button x="50" y="450" width="100" height="100" img="l3.png" img_pressed="l3_.png" screen="level3">
-        <button x="50" y="600" width="100" height="100" img="l4.png" img_pressed="l4_.png" screen="level4">
+        <button x="50" y="50" width="50" height="50" img="images/back.png" img_pressed="images/back_.png" screen="menu">
+        <button x="50" y="150" width="100" height="100" img="images/l1.png" img_pressed="images/l1_.png" screen="level1">
+        <button x="50" y="300" width="100" height="100" img="images/l2.png" img_pressed="images/l2_.png" screen="level2">
+        <button x="50" y="450" width="100" height="100" img="images/l3.png" img_pressed="images/l3_.png" screen="level3">
+        <button x="50" y="600" width="100" height="100" img="images/l4.png" img_pressed="images/l4_.png" screen="level4">
     </screen>
     
     <screen name="options">
-        <button x="50" y="50" width="50" height="50" img="back.png" img_pressed="back_.png" screen="menu">
+        <button x="50" y="50" width="50" height="50" img="images/back.png" img_pressed="images/back_.png" screen="menu">
     </screen>
     
     <screen name="help">
-        <button x="50" y="50" width="50" height="50" img="back.png" img_pressed="back_.png" screen="menu">
+        <button x="50" y="50" width="50" height="50" img="images/back.png" img_pressed="images/back_.png" screen="menu">
         <text x="50" y="150" align="left">To play the game, reflect light from the source into the receiver.</text>
         <text x="50" y="190" align="left">It must receive over a certain amount of light for the level to complete.</text>
         <text x="50" y="230" align="left">Have fun!</text>

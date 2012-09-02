@@ -11,6 +11,10 @@ public class Button {
 	Bitmap normal, pressed;
 	
 	
+	public Button(){
+		
+	}
+	
 	public Button(float x_min_, float y_min_, float x_max_, float y_max_, String action_, Bitmap button_bmp, Bitmap pressed_bmp){
 		
 		x_min = x_min_;

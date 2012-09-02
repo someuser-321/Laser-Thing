@@ -3,6 +3,9 @@ package com.ChrisAndrew.Luminous;
 
 import java.io.IOException;
 
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import android.content.Context;
 import android.graphics.*;
 import android.graphics.Paint.Align;
@@ -127,7 +130,27 @@ public class GameView extends SurfaceView {
 		try {
 			Thread.sleep(200);
 		} catch (Exception e) {
-			
+			return false;
+		}
+		
+		Node screen = config.getScreen(action);
+		Node buttons_ = config.getButtonNodes(screen);
+		
+		Button[] buttons = new Button[buttons_.getChildNodes().getLength()];
+		
+		for ( int i=0 ; i<buttons_.getChildNodes().getLength() ; i++){
+			Node curButton = buttons_.getChildNodes().item(i);
+			float x = Float.valueOf(config.getNodeAttribute("x", curButton));
+			float y = Float.valueOf(config.getNodeAttribute("y", curButton));
+			buttons[i].x_min = x;
+			buttons[i].x_max = x + Float.valueOf(config.getNodeAttribute("width", curButton));
+			buttons[i].y_min = y;
+			buttons[i].y_max = y + Float.valueOf(config.getNodeAttribute("height", curButton));
+			buttons[i].action = config.getNodeAttribute("screen", curButton);
+			try {
+				buttons[i].normal = BitmapFactory.decodeStream(context.getAssets().open(config.getNodeAttribute("img", curButton)));
+				buttons[i].pressed = BitmapFactory.decodeStream(context.getAssets().open(config.getNodeAttribute("img_pressed", curButton)));
+			} catch (IOException e) {}
 		}
 		
 		
