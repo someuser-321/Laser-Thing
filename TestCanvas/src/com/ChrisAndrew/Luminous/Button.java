@@ -16,7 +16,7 @@ public class Button {
 		
 	}
 	
-	public Button(int x_min_, int y_min_, int x_max_, int y_max_, String action_, Bitmap button_bmp, Bitmap pressed_bmp){
+	public Button(int x_min_, int y_min_, int x_max_, int y_max_, String action_, String text_){
 		
 		x_min = x_min_;
 		y_min = y_min_;
@@ -24,8 +24,7 @@ public class Button {
 		y_max = y_max_;
 		
 		action = action_;
-		normal = button_bmp;
-		pressed = pressed_bmp;
+		text = text_;
 
 	}
 	

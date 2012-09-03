@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<screens>
+<screens width="1000" height="800">
     
     <screen name="menu">
-        <button x="500" y="200" width="400" height="100" img="images/button.png" img_pressed="images/button_.png" screen="levels" text="LEVELS" textsize="64"></button>
-        <button x="500" y="300" width="400" height="100" img="images/button.png" img_pressed="images/button_.png" screen="options" text="OPTIONS" textsize="64"></button>
-        <button x="500" y="400" width="400" height="100" img="images/button.png" img_pressed="images/button_.png" screen="help" text="HELP" textsize="64"></button>
+        <button x="300" y="200" width="400" height="100" img="images/button.png" img_pressed="images/button_.png" screen="levels" text="LEVELS" textsize="64"></button>
+        <button x="300" y="300" width="400" height="100" img="images/button.png" img_pressed="images/button_.png" screen="options" text="OPTIONS" textsize="64"></button>
+        <button x="300" y="400" width="400" height="100" img="images/button.png" img_pressed="images/button_.png" screen="help" text="HELP" textsize="64"></button>
         <background img="images/tile.png"></background>
     </screen>
     
@@ -22,9 +22,9 @@
     
     <screen name="help">
         <button x="50" y="50" width="50" height="50" img="images/back.png" img_pressed="images/back_.png" screen="menu"></button>
-        <text x="50" y="150" align="left">To play the game, reflect light from the source into the receiver.</text>
-        <text x="50" y="190" align="left">It must receive over a certain amount of light for the level to complete.</text>
-        <text x="50" y="230" align="left">Have fun!</text>
+        <text x="50" y="150" align="left" r="255" g="255" b="255" size="32">To play the game, reflect light from the source into the receiver.</text>
+        <text x="50" y="190" align="left" r="255" g="255" b="255" size="32">It must receive over a certain amount of light for the level to complete.</text>
+        <text x="50" y="230" align="left" r="255" g="255" b="255" size="32">Have fun!</text>
     </screen>
     
 </screens>

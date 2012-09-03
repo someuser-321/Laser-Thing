@@ -41,6 +41,11 @@ public class ConfigManager {
 		}
 	
 	}
+
+	
+	public Node getRootNode(String name){
+		return doc.getElementsByTagName(name).item(0);
+	}
 	
 	public Node getScreen(String name){
 

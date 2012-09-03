@@ -9,12 +9,12 @@ import org.w3c.dom.NodeList;
 import android.content.Context;
 import android.graphics.*;
 import android.graphics.Paint.Align;
+import android.util.DisplayMetrics;
 import android.view.*;
 
 
 public class GameView extends SurfaceView {
 	
-	private Bitmap bmp, bmp_large;
 	private SurfaceHolder holder;
 	private GameLoopThread gameLoopThread;
 	private boolean flag = false;
@@ -26,8 +26,10 @@ public class GameView extends SurfaceView {
     private Paint myPaint = new Paint(Paint.ANTI_ALIAS_FLAG);  
     private Typeface mFace;
     public Button[] buttons;
-    private String[] text;
+    private Text[] text;
     private Bitmap background;
+    
+    public int screenwidth, screenheight = 0;
     
     public ConfigManager config;
 
@@ -37,6 +39,15 @@ public class GameView extends SurfaceView {
 		super(context_);
 		
 		context = context_;
+		
+		Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+		DisplayMetrics dm = new DisplayMetrics();
+		display.getMetrics(dm);
+		
+		screenwidth = dm.widthPixels;
+		System.out.println(screenwidth);
+		screenheight = dm.heightPixels;
+		System.out.println(screenheight);
 		
 		gameLoopThread = new GameLoopThread(this);
 		holder = getHolder();
@@ -70,12 +81,6 @@ public class GameView extends SurfaceView {
 
 			}
 		);
-
-		try {
-			bmp = BitmapFactory.decodeStream(context.getAssets().open("images/lightbulb.png"));
-		} catch (IOException e) {}
-		
-		bmp_large = Bitmap.createScaledBitmap(bmp, bmp.getWidth()/2, bmp.getHeight()/2, true);
 		
 		mFace = Typeface.createFromAsset(context.getAssets(), "fonts/laserfont.ttf");  
 		myPaint.setTextSize(32);
@@ -95,15 +100,15 @@ public class GameView extends SurfaceView {
 		
     	if (canvas != null){
     		
-    		canvas.drawColor(Color.WHITE);
+    		canvas.drawColor(Color.RED);
     		
     		int x = 0, y = 0;
-    		while (x < 64) {
-    		    while (y < 32) {
-    		        canvas.drawBitmap(background, x*background.getWidth()/*+x*/, y*background.getHeight()/*+y*/, null);
-    		        y += 1;
+    		while ( x < screenwidth ) {
+    		    while ( y < screenheight ) {
+    		        canvas.drawBitmap(background, x, y, null);
+    		        y += background.getHeight();
     		    }
-    		    x += 1;
+    		    x += background.getWidth();
     		    y = 0;
     		}
 
@@ -111,7 +116,14 @@ public class GameView extends SurfaceView {
     			canvas.drawBitmap(buttons[i].normal, buttons[i].x_min, buttons[i].y_min, null);
     			myPaint.setTextSize(buttons[i].textsize);
     			canvas.drawText(buttons[i].text, (buttons[i].x_min + buttons[i].x_max)/2, (buttons[i].y_min + buttons[i].y_max)/2+16, myPaint);
-    		}    		
+    		}
+    		
+    		for ( int i=0 ; i<text.length ; i++ ){
+    			myPaint.setTextSize(text[i].size);
+    			myPaint.setARGB(255, text[i].r, text[i].g, text[i].b);
+    			myPaint.setTextAlign(text[i].align);
+    			canvas.drawText(text[i].text, text[i].x, text[i].y, myPaint);
+    		} 
 
     	}
 
@@ -149,24 +161,25 @@ public class GameView extends SurfaceView {
 		
 		Node screen = config.getScreen(action);
 		Node buttons_ = config.getButtonNodes(screen);
+		Node text_ = config.getTextNodes(screen);
 		
 		buttons = new Button[buttons_.getChildNodes().getLength()];
+		text = new Text[text_.getChildNodes().getLength()];
+		
+		int width_ = Integer.parseInt(config.getNodeAttribute("width", config.getRootNode("screens")));
+		int height_ = Integer.parseInt(config.getNodeAttribute("height", config.getRootNode("screens")));
+		
 		
 		for ( int i=0 ; i<buttons_.getChildNodes().getLength() ; i++){
+			
 			Node curButton = buttons_.getChildNodes().item(i);
-			int x = Integer.parseInt(config.getNodeAttribute("x", curButton));
-			int y = Integer.parseInt(config.getNodeAttribute("y", curButton));
-			int width = Integer.parseInt(config.getNodeAttribute("width", curButton));
-			int height = Integer.parseInt(config.getNodeAttribute("height", curButton));
+			int x = Integer.parseInt(config.getNodeAttribute("x", curButton))*screenwidth/width_;
+			int y = Integer.parseInt(config.getNodeAttribute("y", curButton))*screenheight/height_;
+			int width = Integer.parseInt(config.getNodeAttribute("width", curButton))*screenwidth/width_;
+			int height = Integer.parseInt(config.getNodeAttribute("height", curButton))*screenheight/height_;
 			
-			buttons[i] = new Button();
-			
-			buttons[i].x_min = x;
-			buttons[i].x_max = x + width;
-			buttons[i].y_min = y;
-			buttons[i].y_max = y + height;
-			buttons[i].action = config.getNodeAttribute("screen", curButton);
-			buttons[i].text = config.getNodeAttribute("text", curButton);
+			buttons[i] = new Button(x, y, x + width, y + height, config.getNodeAttribute("screen", curButton), config.getNodeAttribute("text", curButton));
+
 			buttons[i].textsize = 16;
 			if ( config.getNodeAttribute("textsize", curButton) != null )
 				buttons[i].textsize = Float.parseFloat(config.getNodeAttribute("textsize", curButton));
@@ -177,7 +190,25 @@ public class GameView extends SurfaceView {
 			} catch (IOException e) {
 				return false;
 			}
+			
 		}
+		
+		
+		for ( int i=0 ; i<text_.getChildNodes().getLength() ; i++ ){
+			
+			Node curText = text_.getChildNodes().item(i);
+			int x = Integer.parseInt(config.getNodeAttribute("x", curText))*screenwidth/width_;
+			int y = Integer.parseInt(config.getNodeAttribute("y", curText))*screenheight/height_;
+			int size = Integer.parseInt(config.getNodeAttribute("size", curText));
+			int r = Integer.parseInt(config.getNodeAttribute("r", curText));
+			int g = Integer.parseInt(config.getNodeAttribute("g", curText));
+			int b = Integer.parseInt(config.getNodeAttribute("b", curText));
+			String align = config.getNodeAttribute("align", curText);
+			
+			text[i] = new Text(x, y, curText.getNodeValue(), size, align, r, g, b);
+			
+		}
+		
 		
 		Node bg = config.getBackgroundNodes(screen).getChildNodes().item(0);
 		
