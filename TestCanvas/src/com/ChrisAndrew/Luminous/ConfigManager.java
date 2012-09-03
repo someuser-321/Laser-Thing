@@ -15,8 +15,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 
 public class ConfigManager {

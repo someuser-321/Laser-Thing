@@ -9,7 +9,7 @@ public class Button {
 	String action;
 	String text;
 	float textsize;
-	Bitmap normal, pressed;
+	Bitmap normal;
 	
 	
 	public Button(){
@@ -28,19 +28,7 @@ public class Button {
 
 	}
 	
-	private void toggleimage(){
-		
-		Bitmap tmp = this.normal;
-		
-		this.normal = this.pressed;
-		this.pressed = tmp;
-		
-	}
-	
-	public boolean press(GameView view){ 
-		
-		toggleimage();
-		
+	public boolean press(GameView view){ 	
 		return view.changeScreen(action);
 	}
 

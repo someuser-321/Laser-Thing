@@ -13,6 +13,10 @@ public class Text {
 	public int r, g, b;
 	
 	
+	public Text(){
+		
+	}
+	
 	public Text(int x_, int y_, String text_, int size_, String align_, int r_, int g_, int b_){
 		
 		x = x_;

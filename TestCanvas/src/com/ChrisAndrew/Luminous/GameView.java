@@ -4,7 +4,6 @@ package com.ChrisAndrew.Luminous;
 import java.io.IOException;
 
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import android.content.Context;
 import android.graphics.*;
@@ -30,6 +29,7 @@ public class GameView extends SurfaceView {
     private Bitmap background;
     
     public int screenwidth, screenheight = 0;
+    public boolean tile = false;
     
     public ConfigManager config;
 
@@ -102,14 +102,16 @@ public class GameView extends SurfaceView {
     		
     		canvas.drawColor(Color.RED);
     		
-    		int x = 0, y = 0;
-    		while ( x < screenwidth ) {
-    		    while ( y < screenheight ) {
-    		        canvas.drawBitmap(background, x, y, null);
-    		        y += background.getHeight();
-    		    }
-    		    x += background.getWidth();
-    		    y = 0;
+    		if ( tile ){
+    			int x = 0, y = 0;
+    			while ( x < screenwidth ) {
+    				while ( y < screenheight ) {
+    					canvas.drawBitmap(background, x, y, null);
+    					y += background.getHeight();
+    				}
+    				x += background.getWidth();
+    				y = 0;
+    			}
     		}
 
     		for ( int i=0 ; i<buttons.length ; i++ ){
@@ -173,6 +175,7 @@ public class GameView extends SurfaceView {
 		for ( int i=0 ; i<buttons_.getChildNodes().getLength() ; i++){
 			
 			Node curButton = buttons_.getChildNodes().item(i);
+			
 			int x = Integer.parseInt(config.getNodeAttribute("x", curButton))*screenwidth/width_;
 			int y = Integer.parseInt(config.getNodeAttribute("y", curButton))*screenheight/height_;
 			int width = Integer.parseInt(config.getNodeAttribute("width", curButton))*screenwidth/width_;
@@ -186,7 +189,6 @@ public class GameView extends SurfaceView {
 			
 			try {
 				buttons[i].normal = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(context.getAssets().open(config.getNodeAttribute("img", curButton))), width, height, false);
-				buttons[i].pressed = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(context.getAssets().open(config.getNodeAttribute("img_pressed", curButton))), width, height, false);
 			} catch (IOException e) {
 				return false;
 			}
@@ -197,6 +199,7 @@ public class GameView extends SurfaceView {
 		for ( int i=0 ; i<text_.getChildNodes().getLength() ; i++ ){
 			
 			Node curText = text_.getChildNodes().item(i);
+			
 			int x = Integer.parseInt(config.getNodeAttribute("x", curText))*screenwidth/width_;
 			int y = Integer.parseInt(config.getNodeAttribute("y", curText))*screenheight/height_;
 			int size = Integer.parseInt(config.getNodeAttribute("size", curText));
