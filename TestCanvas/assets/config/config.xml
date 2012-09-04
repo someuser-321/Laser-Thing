@@ -9,10 +9,20 @@
     </screen>
     <screen name="levels" bg="images/tile.png">
         <button x="50" y="50" width="50" height="50" img="images/back.png" screen="menu" textsize="1"> </button>
-        <button x="50" y="150" width="100" height="100" img="images/button_small.png" screen="level1" textsize="24">Level 1</button>
-        <button x="50" y="300" width="100" height="100" img="images/button_small.png" screen="level2" textsize="24">Level 2</button>
-        <button x="50" y="450" width="100" height="100" img="images/button_small.png" screen="level3" textsize="24">Level 3</button>
-        <button x="50" y="600" width="100" height="100" img="images/button_small.png" screen="level4" textsize="24">Level 4</button>
+        <button x="50" y="150" width="100" height="100" img="images/button_small_blue.png" screen="level1" textsize="36">1</button>
+        <button x="50" y="300" width="100" height="100" img="images/button_small_blue.png" screen="level2" textsize="36">2</button>
+        <button x="50" y="450" width="100" height="100" img="images/button_small_blue.png" screen="level3" textsize="36">3</button>
+        <button x="50" y="600" width="100" height="100" img="images/button_small_blue.png" screen="level4" textsize="36">4</button>
+        
+		<button x="200" y="150" width="100" height="100" img="images/button_small_green.png" screen="level5" textsize="36">5</button>
+        <button x="200" y="300" width="100" height="100" img="images/button_small_green.png" screen="level6" textsize="36">6</button>
+        <button x="200" y="450" width="100" height="100" img="images/button_small_green.png" screen="level7" textsize="36">7</button>
+        <button x="200" y="600" width="100" height="100" img="images/button_small_green.png" screen="level8" textsize="36">8</button>
+        
+        <button x="350" y="150" width="100" height="100" img="images/button_small_yellow.png" screen="level9" textsize="36">9</button>
+        <button x="350" y="300" width="100" height="100" img="images/button_small_yellow.png" screen="level10" textsize="36">10</button>
+        <button x="350" y="450" width="100" height="100" img="images/button_small_yellow.png" screen="level11" textsize="36">11</button>
+        <button x="350" y="600" width="100" height="100" img="images/button_small_yellow.png" screen="level12" textsize="36">12</button>
     </screen>
     <screen name="options" bg="images/tile.png">
         <button x="50" y="50" width="50" height="50" img="images/back.png" screen="menu" textsize="1"> </button>
