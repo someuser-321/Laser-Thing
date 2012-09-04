@@ -79,7 +79,7 @@ public class GameView extends SurfaceView {
 		);
 
 		
-		config = new ConfigManager(context);
+		config = new ConfigManager(context.getAssets());
 		changeScreen("menu");
 
 	}
@@ -146,9 +146,19 @@ public class GameView extends SurfaceView {
 	
 	public boolean changeScreen(String action){
 
+		if ( action.equals("none") ){
+			touch = new TouchPoint();
+			return false;
+		}
+		
+		config = new ConfigManager(context.getAssets());
+		
 		Node screen = config.getScreen(action);
 		NodeList buttons_ = config.getButtons(screen).getChildNodes();
 		NodeList text_ = config.getText(screen).getChildNodes();
+		
+		int normwidth = config.width;
+		int normheight = config.height;
 		
 		buttons = new Button[buttons_.getLength()];
 		System.out.println("buttons_.getLength() returned '" + buttons_.getLength() + "'");
@@ -164,14 +174,14 @@ public class GameView extends SurfaceView {
 			Node e = buttons_.item(i);
 			buttons[i] = new Button(context.getAssets());
 			
-			int x = Integer.parseInt(config.getAttribute(e, "x"));
+			int x = Integer.parseInt(config.getAttribute(e, "x"))*screenwidth/normwidth;
 			System.out.println("x assigned as '" + x + "'");
-			int y = Integer.parseInt(config.getAttribute(e, "y"));
+			int y = Integer.parseInt(config.getAttribute(e, "y"))*screenheight/normheight;
 			System.out.println("y assigned as '" + y + "'");
 			
-			int width = Integer.parseInt(config.getAttribute(e, "width"));
+			int width = Integer.parseInt(config.getAttribute(e, "width"))*screenwidth/normwidth;
 			System.out.println("width assigned as '" + width + "'");
-			int height = Integer.parseInt(config.getAttribute(e, "height"));
+			int height = Integer.parseInt(config.getAttribute(e, "height"))*screenheight/normheight;
 			System.out.println("height assigned as '" + height + "'");
 
 			String buttontext = e.getFirstChild().getNodeValue();
@@ -207,9 +217,9 @@ public class GameView extends SurfaceView {
 			Node e = text_.item(i);
 			text[i] = new Text();
 			
-			int x = Integer.parseInt(config.getAttribute(e, "x"));
+			int x = Integer.parseInt(config.getAttribute(e, "x"))*screenwidth/normwidth;
 			System.out.println("x assigned as '" + x + "'");
-			int y = Integer.parseInt(config.getAttribute(e, "y"));
+			int y = Integer.parseInt(config.getAttribute(e, "y"))*screenheight/normheight;
 			System.out.println("y assigned as '" + y + "'");
 			
 			int r = Integer.parseInt(config.getAttribute(e, "r"));
@@ -234,6 +244,8 @@ public class GameView extends SurfaceView {
 			text[i].setPaint(r, g, b, size, align, context.getAssets());
 
 		}
+		
+		config = null;
 		
 		return true;
 	}

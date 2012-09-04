@@ -13,27 +13,39 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import android.content.Context;
+import android.content.res.AssetManager;
 
 
 public class ConfigManager {
 
 	private String configfile = "config/config.xml";
+	private InputStream file;
 	
 	private NodeList screens;
 	
+	public int width, height;
 	
-	public ConfigManager(Context context){
+	
+	public ConfigManager(AssetManager assets){
 		
 		try {
 			
+			file = assets.open(configfile);
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse(context.getAssets().open(configfile));
+			Document doc = db.parse(file);
 
 			screens = doc.getElementsByTagName("screens").item(0).getChildNodes();
-			if ( screens == null )
+			width = 1000;
+			height = 800;
+			
+			if ( screens == null ){
 				System.out.println("screens = null");
+			} else {
+				System.out.println("screen width = '" + width + "'");
+				System.out.println("screen height = '" + height + "'");
+			}
+				
 			
 		} catch ( IOException e ){
 			System.out.println("IOException: Unable to open config file");
