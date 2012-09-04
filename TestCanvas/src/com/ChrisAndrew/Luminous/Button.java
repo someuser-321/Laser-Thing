@@ -43,14 +43,14 @@ public class Button {
 		action = action_;
 		text = text_;
 		
-		System.out.println("Button text = " + text );
-		System.out.println("Button action = " + action );
+		Debug.log("Button text = " + text );
+		Debug.log("Button action = " + action );
 
 	}
 	
 	public boolean press(GameView view){
-		System.out.println("Button press text = " + text);
-		System.out.println("Button press action = " + action);
+		Debug.log("Button press text = " + text);
+		Debug.log("Button press action = " + action);
 		return view.changeScreen(action);
 	}
 

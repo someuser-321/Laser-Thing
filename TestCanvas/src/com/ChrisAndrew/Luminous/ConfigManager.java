@@ -40,19 +40,19 @@ public class ConfigManager {
 			height = 800;
 			
 			if ( screens == null ){
-				System.out.println("screens = null");
+				Debug.log("screens = null");
 			} else {
-				System.out.println("screen width = '" + width + "'");
-				System.out.println("screen height = '" + height + "'");
+				Debug.log("screen width = '" + width + "'");
+				Debug.log("screen height = '" + height + "'");
 			}
 				
 			
 		} catch ( IOException e ){
-			System.out.println("IOException: Unable to open config file");
+			Debug.log("IOException: Unable to open config file");
 		} catch ( ParserConfigurationException e ){
-			System.out.println("ParserConfigurationException: Unable to build document");
+			Debug.log("ParserConfigurationException: Unable to build document");
 		} catch ( SAXException e ){
-			System.out.println("SAXException: Unable to parse config file");
+			Debug.log("SAXException: Unable to parse config file");
 		}
 		
 	}
@@ -70,9 +70,9 @@ public class ConfigManager {
 		}
 		
 		if ( ret == null )
-			System.out.println("getScreen() ret = null");
+			Debug.log("getScreen() ret = null");
 		else
-			System.out.println("getScreen() returned a node of length '" + ret.getChildNodes().getLength() + "'");
+			Debug.log("getScreen() returned a node of length '" + ret.getChildNodes().getLength() + "'");
 		
 		return ret;
 	}
@@ -93,9 +93,9 @@ public class ConfigManager {
 		}
 		
 		if ( ret == null )
-			System.out.println("getAttribute(" + attr + ") ret = null");
+			Debug.log("getAttribute(" + attr + ") ret = null");
 		else
-			System.out.println("getAttribute(" + attr + ") returned '" + ret + "'");
+			Debug.log("getAttribute(" + attr + ") returned '" + ret + "'");
 		
 		return ret;
 	}
@@ -115,9 +115,9 @@ public class ConfigManager {
 		}
 		
 		if ( ret == null )
-			System.out.println("getButtons() ret = null");
+			Debug.log("getButtons() ret = null");
 		else
-			System.out.println("getButtons() returned a node of length '" + ret.getChildNodes().getLength() + "' from parent node of length '" + l + "'");
+			Debug.log("getButtons() returned a node of length '" + ret.getChildNodes().getLength() + "' from parent node of length '" + l + "'");
 		
 		return ret;
 	}
@@ -137,16 +137,16 @@ public class ConfigManager {
 		}
 		
 		if ( ret == null )
-			System.out.println("getText() ret = null");
+			Debug.log("getText() ret = null");
 		else
-			System.out.println("getText() returned a node of length '" + ret.getChildNodes().getLength() + "' from parent node of length '" + l + "'");
+			Debug.log("getText() returned a node of length '" + ret.getChildNodes().getLength() + "' from parent node of length '" + l + "'");
 		
 		return ret;
 	}
 	
 	private void prettyPrint(Node node, String padding){
 		
-		System.out.println("+" + padding + node.getNodeName());
+		Debug.log("+" + padding + node.getNodeName());
 		NodeList z = node.getChildNodes();
 		
 		for ( int i=0 ; i<z.getLength() ; i++ ){

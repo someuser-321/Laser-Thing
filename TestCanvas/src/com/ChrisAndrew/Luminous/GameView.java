@@ -161,12 +161,12 @@ public class GameView extends SurfaceView {
 		int normheight = config.height;
 		
 		buttons = new Button[buttons_.getLength()];
-		System.out.println("buttons_.getLength() returned '" + buttons_.getLength() + "'");
-		System.out.println("buttons.length() returned '" + buttons.length + "'");
+		Debug.log("buttons_.getLength() returned '" + buttons_.getLength() + "'");
+		Debug.log("buttons.length() returned '" + buttons.length + "'");
 		
 		text = new Text[text_.getLength()];
-		System.out.println("text_.getLength() returned '" + text_.getLength() + "'");
-		System.out.println("text.length() returned '" + text.length + "'");	
+		Debug.log("text_.getLength() returned '" + text_.getLength() + "'");
+		Debug.log("text.length() returned '" + text.length + "'");	
 		
 		
 		for ( int i=0 ; i<buttons_.getLength() ; i++ ){
@@ -175,24 +175,24 @@ public class GameView extends SurfaceView {
 			buttons[i] = new Button(context.getAssets());
 			
 			int x = Integer.parseInt(config.getAttribute(e, "x"))*screenwidth/normwidth;
-			System.out.println("x assigned as '" + x + "'");
+			Debug.log("x assigned as '" + x + "'");
 			int y = Integer.parseInt(config.getAttribute(e, "y"))*screenheight/normheight;
-			System.out.println("y assigned as '" + y + "'");
+			Debug.log("y assigned as '" + y + "'");
 			
 			int width = Integer.parseInt(config.getAttribute(e, "width"))*screenwidth/normwidth;
-			System.out.println("width assigned as '" + width + "'");
+			Debug.log("width assigned as '" + width + "'");
 			int height = Integer.parseInt(config.getAttribute(e, "height"))*screenheight/normheight;
-			System.out.println("height assigned as '" + height + "'");
+			Debug.log("height assigned as '" + height + "'");
 
 			String buttontext = e.getFirstChild().getNodeValue();
-			System.out.println("text assigned as '" + buttontext + "'");
+			Debug.log("text assigned as '" + buttontext + "'");
 			float textsize = Float.parseFloat(config.getAttribute(e, "textsize"));
-			System.out.println("textsize assigned as '" + textsize + "'");
+			Debug.log("textsize assigned as '" + textsize + "'");
 			
 			String action_ = config.getAttribute(e, "screen");
-			System.out.println("screen assigned as '" + action_ + "'");
+			Debug.log("screen assigned as '" + action_ + "'");
 			String bmp = config.getAttribute(e, "img");
-			System.out.println("bmp assigned as '" + bmp + "'");
+			Debug.log("bmp assigned as '" + bmp + "'");
 			
 			buttons[i].x_min = x;
 			buttons[i].x_max = x + width;
@@ -207,7 +207,7 @@ public class GameView extends SurfaceView {
 			try {
 				buttons[i].bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(context.getAssets().open(bmp)), width, height, false);
 			} catch ( IOException err ){
-				System.out.println("IOException: unable to get button bitmap");
+				Debug.log("IOException: unable to get button bitmap");
 			}
 			
 		}
@@ -218,23 +218,23 @@ public class GameView extends SurfaceView {
 			text[i] = new Text();
 			
 			int x = Integer.parseInt(config.getAttribute(e, "x"))*screenwidth/normwidth;
-			System.out.println("x assigned as '" + x + "'");
+			Debug.log("x assigned as '" + x + "'");
 			int y = Integer.parseInt(config.getAttribute(e, "y"))*screenheight/normheight;
-			System.out.println("y assigned as '" + y + "'");
+			Debug.log("y assigned as '" + y + "'");
 			
 			int r = Integer.parseInt(config.getAttribute(e, "r"));
-			System.out.println("r assigned as '" + r + "'");
+			Debug.log("r assigned as '" + r + "'");
 			int g = Integer.parseInt(config.getAttribute(e, "g"));
-			System.out.println("g assigned as '" + g + "'");
+			Debug.log("g assigned as '" + g + "'");
 			int b = Integer.parseInt(config.getAttribute(e, "b"));
-			System.out.println("b assigned as '" + b + "'");
+			Debug.log("b assigned as '" + b + "'");
 			
 			Float size = Float.parseFloat(config.getAttribute(e, "size"));
-			System.out.println("size assigned as '" + size + "'");
+			Debug.log("size assigned as '" + size + "'");
 			String align = config.getAttribute(e, "align");
-			System.out.println("align assigned as '" + align + "'");
+			Debug.log("align assigned as '" + align + "'");
 			String texttext = e.getFirstChild().getNodeValue();
-			System.out.println("texttext assigned as '" + texttext + "'");
+			Debug.log("texttext assigned as '" + texttext + "'");
 			
 			text[i].x = x;
 			text[i].y = y;
