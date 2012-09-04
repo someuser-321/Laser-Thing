@@ -23,7 +23,7 @@ public class ConfigManager {
 	
 	private NodeList screens;
 	
-	public int width, height;
+	public float width, height;
 	
 	
 	public ConfigManager(AssetManager assets){
@@ -36,8 +36,8 @@ public class ConfigManager {
 			Document doc = db.parse(file);
 
 			screens = doc.getElementsByTagName("screens").item(0).getChildNodes();
-			width = 1000;
-			height = 800;
+			width = 1280;
+			height = 752;
 			
 			if ( screens == null ){
 				Debug.log("screens = null");

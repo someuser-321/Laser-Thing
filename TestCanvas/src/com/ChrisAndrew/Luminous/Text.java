@@ -9,7 +9,7 @@ import android.graphics.Typeface;
 
 public class Text {
 	
-	public int x, y;
+	public float x, y;
 	public String text;
 	
 	public float size;
@@ -21,7 +21,7 @@ public class Text {
 		
 	}
 	
-	public Text(int x_, int y_, String text_, int size_, String align_, int r_, int g_, int b_){
+	public Text(float x_, float y_, String text_, int size_, String align_, int r_, int g_, int b_){
 		
 		x = x_;
 		y = y_;

@@ -26,7 +26,7 @@ public class GameView extends SurfaceView {
     private Text[] text;
     private Bitmap background;
     
-    public int screenwidth, screenheight = 0;
+    public float screenwidth, screenheight = 0;
     public boolean tile = false;
     
     public ConfigManager config;
@@ -43,7 +43,9 @@ public class GameView extends SurfaceView {
 		display.getMetrics(dm);
 		
 		screenwidth = dm.widthPixels;
+		Debug.log("screenwidth = " + screenwidth);
 		screenheight = dm.heightPixels;
+		Debug.log("screenheight = " + screenheight);
 		
 		gameLoopThread = new GameLoopThread(this);
 		holder = getHolder();
@@ -157,8 +159,8 @@ public class GameView extends SurfaceView {
 		NodeList buttons_ = config.getButtons(screen).getChildNodes();
 		NodeList text_ = config.getText(screen).getChildNodes();
 		
-		int normwidth = config.width;
-		int normheight = config.height;
+		float normwidth = config.width;
+		float normheight = config.height;
 		
 		buttons = new Button[buttons_.getLength()];
 		Debug.log("buttons_.getLength() returned '" + buttons_.getLength() + "'");
@@ -174,14 +176,14 @@ public class GameView extends SurfaceView {
 			Node e = buttons_.item(i);
 			buttons[i] = new Button(context.getAssets());
 			
-			int x = Integer.parseInt(config.getAttribute(e, "x"))*screenwidth/normwidth;
+			float x = Integer.parseInt(config.getAttribute(e, "x"))*(screenwidth/normwidth);
 			Debug.log("x assigned as '" + x + "'");
-			int y = Integer.parseInt(config.getAttribute(e, "y"))*screenheight/normheight;
+			float y = Integer.parseInt(config.getAttribute(e, "y"))*(screenheight/normheight);
 			Debug.log("y assigned as '" + y + "'");
 			
-			int width = Integer.parseInt(config.getAttribute(e, "width"))*screenwidth/normwidth;
+			float width = Integer.parseInt(config.getAttribute(e, "width"))*(screenwidth/normwidth);
 			Debug.log("width assigned as '" + width + "'");
-			int height = Integer.parseInt(config.getAttribute(e, "height"))*screenheight/normheight;
+			float height = Integer.parseInt(config.getAttribute(e, "height"))*(screenheight/normheight);
 			Debug.log("height assigned as '" + height + "'");
 
 			String buttontext = e.getFirstChild().getNodeValue();
@@ -205,7 +207,7 @@ public class GameView extends SurfaceView {
 			buttons[i].action = action_;
 			
 			try {
-				buttons[i].bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(context.getAssets().open(bmp)), width, height, false);
+				buttons[i].bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(context.getAssets().open(bmp)), (int)width, (int)height, false);
 			} catch ( IOException err ){
 				Debug.log("IOException: unable to get button bitmap");
 			}
@@ -217,9 +219,9 @@ public class GameView extends SurfaceView {
 			Node e = text_.item(i);
 			text[i] = new Text();
 			
-			int x = Integer.parseInt(config.getAttribute(e, "x"))*screenwidth/normwidth;
+			float x = Integer.parseInt(config.getAttribute(e, "x"))*(screenwidth/normwidth);
 			Debug.log("x assigned as '" + x + "'");
-			int y = Integer.parseInt(config.getAttribute(e, "y"))*screenheight/normheight;
+			float y = Integer.parseInt(config.getAttribute(e, "y"))*(screenheight/normheight);
 			Debug.log("y assigned as '" + y + "'");
 			
 			int r = Integer.parseInt(config.getAttribute(e, "r"));

@@ -10,8 +10,8 @@ import android.graphics.Paint.Align;
 
 public class Button {
 
-	public int x_min, x_max;
-	public int y_min, y_max;
+	public float x_min, x_max;
+	public float y_min, y_max;
 	
 	public String action;
 	public String text;
@@ -33,7 +33,7 @@ public class Button {
 		
 	}
 	
-	public Button(int x_min_, int y_min_, int x_max_, int y_max_, String action_, String text_){
+	public Button(float x_min_, float y_min_, float x_max_, float y_max_, String action_, String text_){
 		
 		x_min = x_min_;
 		y_min = y_min_;
