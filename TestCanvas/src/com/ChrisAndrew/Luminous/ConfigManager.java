@@ -29,8 +29,11 @@ public class ConfigManager {
 			
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse(context.getAssets().open(configfile));		
-			screens = doc.getElementsByTagName("screens");
+			Document doc = db.parse(context.getAssets().open(configfile));
+
+			screens = doc.getElementsByTagName("screens").item(0).getChildNodes();
+			if ( screens == null )
+				System.out.println("screens = null");
 			
 		} catch ( IOException e ){
 			System.out.println("IOException: Unable to open config file");
@@ -39,64 +42,105 @@ public class ConfigManager {
 		} catch ( SAXException e ){
 			System.out.println("SAXException: Unable to parse config file");
 		}
-
 		
 	}
 
 	public Node getScreen(String name){
 		
 		Node ret = null;
-
 		for ( int i=0 ; i<screens.getLength() ; i++ ){
-			if ( screens.item(i).getNodeName().equals(name) ){
-				ret = screens.item(i);
+			if ( screens.item(i).getNodeType() != Node.TEXT_NODE ){
+				if ( getAttribute(screens.item(i), "name").equals(name) ){
+					ret = screens.item(i);
+					break;
+				}
 			}
 		}
+		
+		if ( ret == null )
+			System.out.println("getScreen() ret = null");
+		else
+			System.out.println("getScreen() returned a node of length '" + ret.getChildNodes().getLength() + "'");
+		
+		return ret;
+	}
+	
+	public String getAttribute(Node node, String attr){
+		
+		String ret = null;
+		
+		NamedNodeMap attributes = node.getAttributes();
+		
+		if ( attributes != null ){
+			for ( int i=0 ; i<attributes.getLength() ; i++ ){
+				if ( attributes.item(i).getNodeName().equals(attr) ){
+					ret = attributes.item(i).getNodeValue();
+					break;
+				}
+			}
+		}
+		
+		if ( ret == null )
+			System.out.println("getAttribute(" + attr + ") ret = null");
+		else
+			System.out.println("getAttribute(" + attr + ") returned '" + ret + "'");
 		
 		return ret;
 	}
 	
 	public Node getButtons(Node screen){
 		
-		NodeList out = screen.getChildNodes();
+		NodeList nodes = screen.getChildNodes();
+		int l = nodes.getLength();
 		Node ret = screen.cloneNode(false);
 		
-		for ( int i=0 ; i<out.getLength() ; i++ ){
-			if ( out.item(i).getNodeName().equals("button") ){
-				ret.appendChild(out.item(i));
+		for ( int i=0 ; i<nodes.getLength() ; i++ ){
+			if ( nodes.item(i).getNodeType() != Node.TEXT_NODE ){
+				if ( nodes.item(i).getNodeName().equals("button") ){
+					ret.appendChild(nodes.item(i));
+				}
 			}
 		}
+		
+		if ( ret == null )
+			System.out.println("getButtons() ret = null");
+		else
+			System.out.println("getButtons() returned a node of length '" + ret.getChildNodes().getLength() + "' from parent node of length '" + l + "'");
 		
 		return ret;
 	}
 	
 	public Node getText(Node screen){
 		
-		NodeList out = screen.getChildNodes();
+		NodeList nodes = screen.getChildNodes();
+		int l = nodes.getLength();
 		Node ret = screen.cloneNode(false);
 		
-		for ( int i=0 ; i<out.getLength() ; i++ ){
-			if ( out.item(i).getNodeName().equals("text") ){
-				ret.appendChild(out.item(i));
+		for ( int i=0 ; i<nodes.getLength() ; i++ ){
+			if ( nodes.item(i).getNodeType() != Node.TEXT_NODE ){
+				if ( nodes.item(i).getNodeName().equals("text") ){
+					ret.appendChild(nodes.item(i));
+				}
 			}
 		}
+		
+		if ( ret == null )
+			System.out.println("getText() ret = null");
+		else
+			System.out.println("getText() returned a node of length '" + ret.getChildNodes().getLength() + "' from parent node of length '" + l + "'");
 		
 		return ret;
 	}
 	
-	public String getAttirbute(Node node, String attr){
+	private void prettyPrint(Node node, String padding){
 		
-		String ret = "0";
+		System.out.println("+" + padding + node.getNodeName());
+		NodeList z = node.getChildNodes();
 		
-		NamedNodeMap attributes = node.getAttributes();
-		
-		for ( int i=0 ; i<attributes.getLength() ; i++ ){
-			if ( attributes.item(i).getNodeName().equals(attr) ){
-				ret = attributes.item(i).getNodeValue();
-			}
+		for ( int i=0 ; i<z.getLength() ; i++ ){
+			prettyPrint(z.item(i), padding + "----");
 		}
 		
-		return ret;
 	}
 
 }

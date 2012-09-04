@@ -1,8 +1,11 @@
 package com.ChrisAndrew.Luminous;
 
 
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.graphics.Paint.Align;
 
 
 public class Button {
@@ -20,7 +23,13 @@ public class Button {
 	
 	
 	
-	public Button(){
+	public Button(AssetManager assets){
+
+		paint = new Paint();
+		paint.setARGB(255, 255, 255, 255);
+		paint.setTextAlign(Align.CENTER);
+		paint.setTypeface(Typeface.createFromAsset(assets, "fonts/laserfont.ttf"));
+		paint.setAntiAlias(true);
 		
 	}
 	

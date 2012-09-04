@@ -151,23 +151,38 @@ public class GameView extends SurfaceView {
 		NodeList text_ = config.getText(screen).getChildNodes();
 		
 		buttons = new Button[buttons_.getLength()];
+		System.out.println("buttons_.getLength() returned '" + buttons_.getLength() + "'");
+		System.out.println("buttons.length() returned '" + buttons.length + "'");
+		
 		text = new Text[text_.getLength()];
+		System.out.println("text_.getLength() returned '" + text_.getLength() + "'");
+		System.out.println("text.length() returned '" + text.length + "'");	
+		
 		
 		for ( int i=0 ; i<buttons_.getLength() ; i++ ){
 			
 			Node e = buttons_.item(i);
+			buttons[i] = new Button(context.getAssets());
 			
-			int x = Integer.parseInt(config.getAttirbute(e, "x"));
-			int y = Integer.parseInt(config.getAttirbute(e, "y"));
+			int x = Integer.parseInt(config.getAttribute(e, "x"));
+			System.out.println("x assigned as '" + x + "'");
+			int y = Integer.parseInt(config.getAttribute(e, "y"));
+			System.out.println("y assigned as '" + y + "'");
 			
-			int width = Integer.parseInt(config.getAttirbute(e, "width"));
-			int height = Integer.parseInt(config.getAttirbute(e, "height"));
+			int width = Integer.parseInt(config.getAttribute(e, "width"));
+			System.out.println("width assigned as '" + width + "'");
+			int height = Integer.parseInt(config.getAttribute(e, "height"));
+			System.out.println("height assigned as '" + height + "'");
+
+			String buttontext = e.getFirstChild().getNodeValue();
+			System.out.println("text assigned as '" + buttontext + "'");
+			float textsize = Float.parseFloat(config.getAttribute(e, "textsize"));
+			System.out.println("textsize assigned as '" + textsize + "'");
 			
-			String buttontext = e.getNodeValue();
-			float textsize = Float.parseFloat(config.getAttirbute(e, "textsize"));
-			
-			String action_ = config.getAttirbute(e, "action");
-			String bmp = config.getAttirbute(e, "img");
+			String action_ = config.getAttribute(e, "screen");
+			System.out.println("screen assigned as '" + action_ + "'");
+			String bmp = config.getAttribute(e, "img");
+			System.out.println("bmp assigned as '" + bmp + "'");
 			
 			buttons[i].x_min = x;
 			buttons[i].x_max = x + width;
@@ -175,7 +190,7 @@ public class GameView extends SurfaceView {
 			buttons[i].y_max = y + height;
 			
 			buttons[i].text = buttontext;
-			buttons[i].textsize = textsize;
+			buttons[i].paint.setTextSize(textsize);
 			
 			buttons[i].action = action_;
 			
@@ -190,17 +205,26 @@ public class GameView extends SurfaceView {
 		for ( int i=0 ; i<text_.getLength() ; i++ ){
 			
 			Node e = text_.item(i);
+			text[i] = new Text();
 			
-			int x = Integer.parseInt(config.getAttirbute(e, "x"));
-			int y = Integer.parseInt(config.getAttirbute(e, "y"));
+			int x = Integer.parseInt(config.getAttribute(e, "x"));
+			System.out.println("x assigned as '" + x + "'");
+			int y = Integer.parseInt(config.getAttribute(e, "y"));
+			System.out.println("y assigned as '" + y + "'");
 			
-			int r = Integer.parseInt(config.getAttirbute(e, "r"));
-			int g = Integer.parseInt(config.getAttirbute(e, "g"));
-			int b = Integer.parseInt(config.getAttirbute(e, "b"));
+			int r = Integer.parseInt(config.getAttribute(e, "r"));
+			System.out.println("r assigned as '" + r + "'");
+			int g = Integer.parseInt(config.getAttribute(e, "g"));
+			System.out.println("g assigned as '" + g + "'");
+			int b = Integer.parseInt(config.getAttribute(e, "b"));
+			System.out.println("b assigned as '" + b + "'");
 			
-			Float size = Float.parseFloat(config.getAttirbute(e, "size"));
-			String align = config.getAttirbute(e, "align");
-			String texttext = e.getNodeValue();
+			Float size = Float.parseFloat(config.getAttribute(e, "size"));
+			System.out.println("size assigned as '" + size + "'");
+			String align = config.getAttribute(e, "align");
+			System.out.println("align assigned as '" + align + "'");
+			String texttext = e.getFirstChild().getNodeValue();
+			System.out.println("texttext assigned as '" + texttext + "'");
 			
 			text[i].x = x;
 			text[i].y = y;

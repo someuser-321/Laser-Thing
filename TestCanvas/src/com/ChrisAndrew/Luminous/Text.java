@@ -37,6 +37,8 @@ public class Text {
 
 	public void setPaint(int r, int g, int b, float size, String align_, AssetManager assets){
 		
+		paint = new Paint();
+		
 		paint.setTextSize(size);
 		paint.setARGB(255, r, g, b);
 		
