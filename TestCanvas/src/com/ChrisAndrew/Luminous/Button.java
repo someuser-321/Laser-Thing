@@ -1,15 +1,23 @@
 package com.ChrisAndrew.Luminous;
 
+
 import android.graphics.Bitmap;
+import android.graphics.Paint;
+
 
 public class Button {
 
 	public int x_min, x_max;
 	public int y_min, y_max;
-	String action;
-	String text;
-	float textsize;
-	Bitmap normal;
+	
+	public String action;
+	public String text;
+	public float textsize;
+	
+	public Paint paint;
+	
+	public Bitmap bmp;
+	
 	
 	
 	public Button(){
@@ -25,10 +33,15 @@ public class Button {
 		
 		action = action_;
 		text = text_;
+		
+		System.out.println("Button text = " + text );
+		System.out.println("Button action = " + action );
 
 	}
 	
-	public boolean press(GameView view){ 	
+	public boolean press(GameView view){
+		System.out.println("Button press text = " + text);
+		System.out.println("Button press action = " + action);
 		return view.changeScreen(action);
 	}
 

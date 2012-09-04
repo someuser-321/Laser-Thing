@@ -8,123 +8,95 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import android.content.res.AssetManager;
+import android.content.Context;
 
 
 public class ConfigManager {
 
 	private String configfile = "config/config.xml";
-	private Document doc;
-
 	
-	public ConfigManager(GameView view){
+	private NodeList screens;
+	
+	
+	public ConfigManager(Context context){
 		
-		AssetManager assets = view.context.getAssets();
-
 		try {
 			
-			InputStream input = assets.open(configfile);
-			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			doc = db.parse(input);
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			Document doc = db.parse(context.getAssets().open(configfile));		
+			screens = doc.getElementsByTagName("screens");
 			
-		} catch (ParserConfigurationException e) { System.out.println("ParserConfigurationException");
-		} catch (SAXException e) {System.out.println("SAXException");
-		} catch (IOException e) {System.out.println("IOException");
+		} catch ( IOException e ){
+			System.out.println("IOException: Unable to open config file");
+		} catch ( ParserConfigurationException e ){
+			System.out.println("ParserConfigurationException: Unable to build document");
+		} catch ( SAXException e ){
+			System.out.println("SAXException: Unable to parse config file");
 		}
-	
-	}
 
-	
-	public Node getRootNode(String name){
-		return doc.getElementsByTagName(name).item(0);
-	}
-	
-	public Node getScreen(String name){
-
-		NodeList screens = doc.getElementsByTagName("screens").item(0).getChildNodes();
-		Node ret = null;
 		
+	}
+
+	public Node getScreen(String name){
+		
+		Node ret = null;
+
 		for ( int i=0 ; i<screens.getLength() ; i++ ){
-			if ( screens.item(i) != null ){
-				if ( getNodeAttribute("name", screens.item(i)).equals(name) ){
-					ret = screens.item(i);
-				}
+			if ( screens.item(i).getNodeName().equals(name) ){
+				ret = screens.item(i);
 			}
 		}
-
+		
 		return ret;
 	}
 	
-	public String getNodeAttribute(String name, Node node){
+	public Node getButtons(Node screen){
+		
+		NodeList out = screen.getChildNodes();
+		Node ret = screen.cloneNode(false);
+		
+		for ( int i=0 ; i<out.getLength() ; i++ ){
+			if ( out.item(i).getNodeName().equals("button") ){
+				ret.appendChild(out.item(i));
+			}
+		}
+		
+		return ret;
+	}
+	
+	public Node getText(Node screen){
+		
+		NodeList out = screen.getChildNodes();
+		Node ret = screen.cloneNode(false);
+		
+		for ( int i=0 ; i<out.getLength() ; i++ ){
+			if ( out.item(i).getNodeName().equals("text") ){
+				ret.appendChild(out.item(i));
+			}
+		}
+		
+		return ret;
+	}
+	
+	public String getAttirbute(Node node, String attr){
 		
 		String ret = "0";
+		
 		NamedNodeMap attributes = node.getAttributes();
-
-		if ( attributes != null ){
-			for ( int i=0; i<attributes.getLength(); i++ ){
-				Node attribute = attributes.item(i);
-				if ( attribute.getNodeName().equals(name) ){
-					ret = attribute.getNodeValue();
-				}
+		
+		for ( int i=0 ; i<attributes.getLength() ; i++ ){
+			if ( attributes.item(i).getNodeName().equals(attr) ){
+				ret = attributes.item(i).getNodeValue();
 			}
 		}
-
+		
 		return ret;
-	}
-	
-	public Node getButtonNodes(Node screen_){
-		
-		NodeList screen = screen_.getChildNodes();
-		Element root = doc.createElement("buttons");
-		
-		for ( int i=0 ; i<screen.getLength() ; i++ ){
-			if ( screen.item(i) != null ){
-				if ( screen.item(i).getNodeName().equals("button") ){
-					root.appendChild(screen.item(i));
-				}
-			}
-		}
-		
-		return root;
-	}
-	
-	public Node getTextNodes(Node screen_){
-		
-		NodeList screen = screen_.getChildNodes();
-		Element root = doc.createElement("texts");
-		
-		for ( int i=0 ; i<screen.getLength() ; i++ ){
-			if ( screen.item(i) != null ){
-				if ( screen.item(i).getNodeName().equals("text") ){
-					root.appendChild(screen.item(i));
-				}
-			}
-		}
-		
-		return root;
-	}
-	
-	public Node getBackgroundNodes(Node screen_){
-		
-		NodeList screen = screen_.getChildNodes();
-		Element root = doc.createElement("background");
-		
-		for ( int i=0 ; i<screen.getLength() ; i++ ){
-			if ( screen.item(i) != null ){
-				if ( screen.item(i).getNodeName().equals("background") ){
-					root.appendChild(screen.item(i));
-					break;
-				}
-			}
-		}
-		
-		return root;
 	}
 
 }

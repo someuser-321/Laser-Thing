@@ -4,10 +4,10 @@ package com.ChrisAndrew.Luminous;
 import java.io.IOException;
 
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import android.content.Context;
 import android.graphics.*;
-import android.graphics.Paint.Align;
 import android.util.DisplayMetrics;
 import android.view.*;
 
@@ -21,9 +21,7 @@ public class GameView extends SurfaceView {
 	public Context context;
 	
 	public TouchPoint touch = new TouchPoint();
-	
-    private Paint myPaint = new Paint(Paint.ANTI_ALIAS_FLAG);  
-    private Typeface mFace;
+
     public Button[] buttons;
     private Text[] text;
     private Bitmap background;
@@ -45,9 +43,7 @@ public class GameView extends SurfaceView {
 		display.getMetrics(dm);
 		
 		screenwidth = dm.widthPixels;
-		System.out.println(screenwidth);
 		screenheight = dm.heightPixels;
-		System.out.println(screenheight);
 		
 		gameLoopThread = new GameLoopThread(this);
 		holder = getHolder();
@@ -81,16 +77,9 @@ public class GameView extends SurfaceView {
 
 			}
 		);
-		
-		mFace = Typeface.createFromAsset(context.getAssets(), "fonts/laserfont.ttf");  
-		myPaint.setTextSize(32);
-		myPaint.setARGB(255, 255, 255, 255);
-		myPaint.setTypeface(mFace);
-		myPaint.setTextAlign(Align.CENTER);
-		myPaint.setAntiAlias(true);
 
 		
-		config = new ConfigManager(this);
+		config = new ConfigManager(context);
 		changeScreen("menu");
 
 	}
@@ -100,7 +89,7 @@ public class GameView extends SurfaceView {
 		
     	if (canvas != null){
     		
-    		canvas.drawColor(Color.RED);
+    		canvas.drawColor(Color.BLACK);
     		
     		if ( tile ){
     			int x = 0, y = 0;
@@ -115,16 +104,12 @@ public class GameView extends SurfaceView {
     		}
 
     		for ( int i=0 ; i<buttons.length ; i++ ){
-    			canvas.drawBitmap(buttons[i].normal, buttons[i].x_min, buttons[i].y_min, null);
-    			myPaint.setTextSize(buttons[i].textsize);
-    			canvas.drawText(buttons[i].text, (buttons[i].x_min + buttons[i].x_max)/2, (buttons[i].y_min + buttons[i].y_max)/2+16, myPaint);
+    			canvas.drawBitmap(buttons[i].bmp, buttons[i].x_min, buttons[i].y_min, null);
+    			canvas.drawText(buttons[i].text, (buttons[i].x_min + buttons[i].x_max)/2, (buttons[i].y_min + buttons[i].y_max)/2+16, buttons[i].paint);
     		}
     		
     		for ( int i=0 ; i<text.length ; i++ ){
-    			myPaint.setTextSize(text[i].size);
-    			myPaint.setARGB(255, text[i].r, text[i].g, text[i].b);
-    			myPaint.setTextAlign(text[i].align);
-    			canvas.drawText(text[i].text, text[i].x, text[i].y, myPaint);
+    			canvas.drawText(text[i].text, text[i].x, text[i].y, text[i].paint);
     		} 
 
     	}
@@ -160,65 +145,71 @@ public class GameView extends SurfaceView {
 	}
 	
 	public boolean changeScreen(String action){
-		
-		Node screen = config.getScreen(action);
-		Node buttons_ = config.getButtonNodes(screen);
-		Node text_ = config.getTextNodes(screen);
-		
-		buttons = new Button[buttons_.getChildNodes().getLength()];
-		text = new Text[text_.getChildNodes().getLength()];
-		
-		int width_ = Integer.parseInt(config.getNodeAttribute("width", config.getRootNode("screens")));
-		int height_ = Integer.parseInt(config.getNodeAttribute("height", config.getRootNode("screens")));
-		
-		
-		for ( int i=0 ; i<buttons_.getChildNodes().getLength() ; i++){
-			
-			Node curButton = buttons_.getChildNodes().item(i);
-			
-			int x = Integer.parseInt(config.getNodeAttribute("x", curButton))*screenwidth/width_;
-			int y = Integer.parseInt(config.getNodeAttribute("y", curButton))*screenheight/height_;
-			int width = Integer.parseInt(config.getNodeAttribute("width", curButton))*screenwidth/width_;
-			int height = Integer.parseInt(config.getNodeAttribute("height", curButton))*screenheight/height_;
-			
-			buttons[i] = new Button(x, y, x + width, y + height, config.getNodeAttribute("screen", curButton), config.getNodeAttribute("text", curButton));
 
-			buttons[i].textsize = 16;
-			if ( config.getNodeAttribute("textsize", curButton) != null )
-				buttons[i].textsize = Float.parseFloat(config.getNodeAttribute("textsize", curButton));
+		Node screen = config.getScreen(action);
+		NodeList buttons_ = config.getButtons(screen).getChildNodes();
+		NodeList text_ = config.getText(screen).getChildNodes();
+		
+		buttons = new Button[buttons_.getLength()];
+		text = new Text[text_.getLength()];
+		
+		for ( int i=0 ; i<buttons_.getLength() ; i++ ){
+			
+			Node e = buttons_.item(i);
+			
+			int x = Integer.parseInt(config.getAttirbute(e, "x"));
+			int y = Integer.parseInt(config.getAttirbute(e, "y"));
+			
+			int width = Integer.parseInt(config.getAttirbute(e, "width"));
+			int height = Integer.parseInt(config.getAttirbute(e, "height"));
+			
+			String buttontext = e.getNodeValue();
+			float textsize = Float.parseFloat(config.getAttirbute(e, "textsize"));
+			
+			String action_ = config.getAttirbute(e, "action");
+			String bmp = config.getAttirbute(e, "img");
+			
+			buttons[i].x_min = x;
+			buttons[i].x_max = x + width;
+			buttons[i].y_min = y;
+			buttons[i].y_max = y + height;
+			
+			buttons[i].text = buttontext;
+			buttons[i].textsize = textsize;
+			
+			buttons[i].action = action_;
 			
 			try {
-				buttons[i].normal = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(context.getAssets().open(config.getNodeAttribute("img", curButton))), width, height, false);
-			} catch (IOException e) {
-				return false;
+				buttons[i].bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(context.getAssets().open(bmp)), width, height, false);
+			} catch ( IOException err ){
+				System.out.println("IOException: unable to get button bitmap");
 			}
 			
 		}
 		
-		
-		for ( int i=0 ; i<text_.getChildNodes().getLength() ; i++ ){
+		for ( int i=0 ; i<text_.getLength() ; i++ ){
 			
-			Node curText = text_.getChildNodes().item(i);
+			Node e = text_.item(i);
 			
-			int x = Integer.parseInt(config.getNodeAttribute("x", curText))*screenwidth/width_;
-			int y = Integer.parseInt(config.getNodeAttribute("y", curText))*screenheight/height_;
-			int size = Integer.parseInt(config.getNodeAttribute("size", curText));
-			int r = Integer.parseInt(config.getNodeAttribute("r", curText));
-			int g = Integer.parseInt(config.getNodeAttribute("g", curText));
-			int b = Integer.parseInt(config.getNodeAttribute("b", curText));
-			String align = config.getNodeAttribute("align", curText);
+			int x = Integer.parseInt(config.getAttirbute(e, "x"));
+			int y = Integer.parseInt(config.getAttirbute(e, "y"));
 			
-			text[i] = new Text(x, y, curText.getNodeValue(), size, align, r, g, b);
+			int r = Integer.parseInt(config.getAttirbute(e, "r"));
+			int g = Integer.parseInt(config.getAttirbute(e, "g"));
+			int b = Integer.parseInt(config.getAttirbute(e, "b"));
 			
+			Float size = Float.parseFloat(config.getAttirbute(e, "size"));
+			String align = config.getAttirbute(e, "align");
+			String texttext = e.getNodeValue();
+			
+			text[i].x = x;
+			text[i].y = y;
+
+			text[i].size = size;
+			text[i].text = texttext;
+			text[i].setPaint(r, g, b, size, align, context.getAssets());
+
 		}
-		
-		
-		Node bg = config.getBackgroundNodes(screen).getChildNodes().item(0);
-		
-		try {
-			background = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(context.getAssets().open(config.getNodeAttribute("img", bg))), 64, 64, false);
-		} catch (IOException e) {}
-		
 		
 		return true;
 	}
