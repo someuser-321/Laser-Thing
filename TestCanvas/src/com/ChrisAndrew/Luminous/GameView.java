@@ -1,11 +1,6 @@
 package com.ChrisAndrew.Luminous;
 
 
-import java.io.IOException;
-
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import android.content.Context;
 import android.graphics.*;
 import android.util.DisplayMetrics;
@@ -30,6 +25,7 @@ public class GameView extends SurfaceView {
     public boolean tile = false;
     
     public ConfigManager config;
+    private Screen currentScreen;
 
 	
 	public GameView(Context context_) {
@@ -153,106 +149,8 @@ public class GameView extends SurfaceView {
 			return false;
 		}
 		
-		config = new ConfigManager(context.getAssets());
+		currentScreen = config.screenCache.get(action);
 		
-		Node screen = config.getScreen(action);
-		NodeList buttons_ = config.getButtons(screen).getChildNodes();
-		NodeList text_ = config.getText(screen).getChildNodes();
-		
-		float normwidth = config.width;
-		float normheight = config.height;
-		
-		buttons = new Button[buttons_.getLength()];
-		Debug.log("buttons_.getLength() returned '" + buttons_.getLength() + "'");
-		Debug.log("buttons.length() returned '" + buttons.length + "'");
-		
-		text = new Text[text_.getLength()];
-		Debug.log("text_.getLength() returned '" + text_.getLength() + "'");
-		Debug.log("text.length() returned '" + text.length + "'");	
-		
-		
-		for ( int i=0 ; i<buttons_.getLength() ; i++ ){
-			
-			Node e = buttons_.item(i);
-			
-			Image image = config.getImage(config.getAttribute(e, "img"));
-			String action_ = config.getAttribute(e, "screen");
-			float textsize = Float.parseFloat(config.getAttribute(e, "textsize"));
-			String buttontext = e.getFirstChild().getNodeValue();
-			
-			
-			float x = Integer.parseInt(config.getAttribute(e, "x"))*(screenwidth/normwidth);
-			Debug.log("x assigned as '" + x + "'");
-			float y = Integer.parseInt(config.getAttribute(e, "y"))*(screenheight/normheight);
-			Debug.log("y assigned as '" + y + "'");
-			
-			float width = Integer.parseInt(config.getAttribute(e, "width"))*(screenwidth/normwidth);
-			Debug.log("width assigned as '" + width + "'");
-			float height = Integer.parseInt(config.getAttribute(e, "height"))*(screenheight/normheight);
-			Debug.log("height assigned as '" + height + "'");
-
-			String buttontext = e.getFirstChild().getNodeValue();
-			Debug.log("text assigned as '" + buttontext + "'");
-			float textsize = Float.parseFloat(config.getAttribute(e, "textsize"));
-			Debug.log("textsize assigned as '" + textsize + "'");
-			
-			String action_ = config.getAttribute(e, "screen");
-			Debug.log("screen assigned as '" + action_ + "'");
-			String bmp = config.getAttribute(e, "img");
-			Debug.log("bmp assigned as '" + bmp + "'");
-			
-			buttons[i].x_min = x;
-			buttons[i].x_max = x + width;
-			buttons[i].y_min = y;
-			buttons[i].y_max = y + height;
-			
-			buttons[i].text = buttontext;
-			buttons[i].paint.setTextSize(textsize);
-			
-			buttons[i].action = action_;
-			
-			try {
-				buttons[i].bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(context.getAssets().open(bmp)), (int)width, (int)height, false);
-			} catch ( IOException err ){
-				Debug.log("IOException: unable to get button bitmap");
-			}
-			
-		}
-		
-		for ( int i=0 ; i<text_.getLength() ; i++ ){
-			
-			Node e = text_.item(i);
-			text[i] = new Text();
-			
-			float x = Integer.parseInt(config.getAttribute(e, "x"))*(screenwidth/normwidth);
-			Debug.log("x assigned as '" + x + "'");
-			float y = Integer.parseInt(config.getAttribute(e, "y"))*(screenheight/normheight);
-			Debug.log("y assigned as '" + y + "'");
-			
-			int r = Integer.parseInt(config.getAttribute(e, "r"));
-			Debug.log("r assigned as '" + r + "'");
-			int g = Integer.parseInt(config.getAttribute(e, "g"));
-			Debug.log("g assigned as '" + g + "'");
-			int b = Integer.parseInt(config.getAttribute(e, "b"));
-			Debug.log("b assigned as '" + b + "'");
-			
-			Float size = Float.parseFloat(config.getAttribute(e, "size"));
-			Debug.log("size assigned as '" + size + "'");
-			String align = config.getAttribute(e, "align");
-			Debug.log("align assigned as '" + align + "'");
-			String texttext = e.getFirstChild().getNodeValue();
-			Debug.log("texttext assigned as '" + texttext + "'");
-			
-			text[i].x = x;
-			text[i].y = y;
-
-			text[i].size = size;
-			text[i].text = texttext;
-			text[i].setPaint(r, g, b, size, align, context.getAssets());
-
-		}
-		
-		config = null;
 		
 		return true;
 	}

@@ -52,7 +52,7 @@ public class Button {
 		
 	}
 	
-	public Button(float x_min_, float y_min_, float x_max_, float y_max_, String action_, String text_){
+	public Button(float x_min_, float y_min_, float x_max_, float y_max_, String action_, String text_, Bitmap bmp_){
 		
 		x_min = x_min_;
 		y_min = y_min_;
@@ -61,6 +61,8 @@ public class Button {
 		
 		action = action_;
 		text = text_;
+		
+		bmp = bmp_;
 		
 		Debug.log("Button text = " + text );
 		Debug.log("Button action = " + action );

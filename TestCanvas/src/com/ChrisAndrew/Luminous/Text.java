@@ -21,7 +21,7 @@ public class Text {
 		
 	}
 	
-	public Text(float x_, float y_, String text_, int size_, String align_, int r_, int g_, int b_){
+	public Text(float x_, float y_, String text_, int size_, String align_, int r_, int g_, int b_, AssetManager assets_){
 		
 		x = x_;
 		y = y_;
@@ -29,9 +29,21 @@ public class Text {
 		text = text_;
 		size = size_;
 		
-		r = r_;
-		g = g_;
-		b = b_;
+		
+		paint = new Paint();
+		paint.setTextSize(size);
+		paint.setARGB(255, r_, g_, b_);
+		
+		if ( align_.equals("right") ){
+			paint.setTextAlign(Align.RIGHT);
+		} else if ( align_.equals("center") ){
+			paint.setTextAlign(Align.CENTER);
+		} else {
+			paint.setTextAlign(Align.LEFT);
+		}
+		
+		paint.setTypeface(Typeface.createFromAsset(assets_, "fonts/laserfont.ttf"));
+		paint.setAntiAlias(true);
 		
 	}
 
