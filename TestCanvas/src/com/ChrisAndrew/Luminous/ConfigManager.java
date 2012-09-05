@@ -2,6 +2,7 @@ package com.ChrisAndrew.Luminous;
 
 
 import java.io.*;
+import java.util.Hashtable;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,28 +15,36 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 
 public class ConfigManager {
 
 	private String configfile = "config/config.xml";
 	private InputStream file;
+	private AssetManager assets_;
 	
 	private NodeList screens;
 	
 	public float width, height;
 	
+	public Hashtable<String, Image> images = new Hashtable<String, Image>();
+	public Hashtable<String, Button> buttons = new Hashtable<String, Button>();
+
 	
 	public ConfigManager(AssetManager assets){
 		
 		try {
 			
-			file = assets.open(configfile);
+			assets_ = assets;
+			file = assets_.open(configfile);
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc = db.parse(file);
 
 			screens = doc.getElementsByTagName("screens").item(0).getChildNodes();
+			getImages(doc.getElementsByTagName("images"));
 			width = 1280;
 			height = 752;
 			
@@ -106,7 +115,7 @@ public class ConfigManager {
 		int l = nodes.getLength();
 		Node ret = screen.cloneNode(false);
 		
-		for ( int i=0 ; i<nodes.getLength() ; i++ ){
+		for ( int i=0 ; i<l ; i++ ){
 			if ( nodes.item(i).getNodeType() != Node.TEXT_NODE ){
 				if ( nodes.item(i).getNodeName().equals("button") ){
 					ret.appendChild(nodes.item(i));
@@ -128,7 +137,7 @@ public class ConfigManager {
 		int l = nodes.getLength();
 		Node ret = screen.cloneNode(false);
 		
-		for ( int i=0 ; i<nodes.getLength() ; i++ ){
+		for ( int i=0 ; i<l ; i++ ){
 			if ( nodes.item(i).getNodeType() != Node.TEXT_NODE ){
 				if ( nodes.item(i).getNodeName().equals("text") ){
 					ret.appendChild(nodes.item(i));
@@ -142,6 +151,44 @@ public class ConfigManager {
 			Debug.log("getText() returned a node of length '" + ret.getChildNodes().getLength() + "' from parent node of length '" + l + "'");
 		
 		return ret;
+	}
+	
+	public void getImages(NodeList root){
+		
+		int i;
+		for ( i=0 ; i<root.getLength() ; i++ ){
+			if ( root.item(i).getNodeType() != Node.TEXT_NODE ){
+				if ( root.item(i).getNodeName().equals("image") ){
+					
+					float x = Float.parseFloat(getAttribute(root.item(i), "x"));
+					float y = Float.parseFloat(getAttribute(root.item(i), "y"));
+					float width = Float.parseFloat(getAttribute(root.item(i), "width"));
+					float height = Float.parseFloat(getAttribute(root.item(i), "height"));
+					Bitmap bmp = null;
+					try {
+						bmp = BitmapFactory.decodeStream(assets_.open(getAttribute(root.item(i), "y")));
+					} catch  ( IOException e ) {}
+					
+					Image img = new Image(x, y, width, height, bmp);
+					images.put(getAttribute(root.item(i), "src"), img);
+				}
+			}
+		}
+		
+
+		Debug.log("getImages() found '" + i + "' images");
+		
+	}
+	
+	public Image getImage(String image){
+		
+		if ( images.containsKey(image) ){
+			return images.get(image);
+		} else {
+			Debug.log("Error retrieving image from cache");
+			return null;
+		}
+		
 	}
 	
 	private void prettyPrint(Node node, String padding){

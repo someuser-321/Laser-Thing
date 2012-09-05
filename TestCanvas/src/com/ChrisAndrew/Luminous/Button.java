@@ -22,9 +22,28 @@ public class Button {
 	public Bitmap bmp;
 	
 	
-	
 	public Button(AssetManager assets){
 
+		paint = new Paint();
+		paint.setARGB(255, 255, 255, 255);
+		paint.setTextAlign(Align.CENTER);
+		paint.setTypeface(Typeface.createFromAsset(assets, "fonts/laserfont.ttf"));
+		paint.setAntiAlias(true);
+		
+	}
+	
+	public Button(Image image, String action_, String text_, AssetManager assets){
+		
+		x_min = image.x;
+		x_max = image.x + image.width;
+		y_min = image.y;
+		y_max = image.y + image.height;
+		
+		bmp = image.bmp;
+		
+		text = text_;
+		action = action_;
+		
 		paint = new Paint();
 		paint.setARGB(255, 255, 255, 255);
 		paint.setTextAlign(Align.CENTER);

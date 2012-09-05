@@ -174,7 +174,12 @@ public class GameView extends SurfaceView {
 		for ( int i=0 ; i<buttons_.getLength() ; i++ ){
 			
 			Node e = buttons_.item(i);
-			buttons[i] = new Button(context.getAssets());
+			
+			Image image = config.getImage(config.getAttribute(e, "img"));
+			String action_ = config.getAttribute(e, "screen");
+			float textsize = Float.parseFloat(config.getAttribute(e, "textsize"));
+			String buttontext = e.getFirstChild().getNodeValue();
+			
 			
 			float x = Integer.parseInt(config.getAttribute(e, "x"))*(screenwidth/normwidth);
 			Debug.log("x assigned as '" + x + "'");
