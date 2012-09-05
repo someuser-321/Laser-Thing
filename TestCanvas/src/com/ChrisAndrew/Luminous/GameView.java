@@ -17,15 +17,15 @@ public class GameView extends SurfaceView {
 	
 	public TouchPoint touch = new TouchPoint();
 
-    public Button[] buttons;
-    private Text[] text;
-    private Bitmap background;
-    
     public float screenwidth, screenheight = 0;
     public boolean tile = false;
     
     public ConfigManager config;
+    
     private Screen currentScreen;
+    public Button[] buttons;
+    private Image[] images;
+    private Text[] text;
 
 	
 	public GameView(Context context_) {
@@ -93,10 +93,10 @@ public class GameView extends SurfaceView {
     			int x = 0, y = 0;
     			while ( x < screenwidth ) {
     				while ( y < screenheight ) {
-    					canvas.drawBitmap(background, x, y, null);
-    					y += background.getHeight();
+    					canvas.drawBitmap(currentScreen.bg, x, y, null);
+    					y += currentScreen.bg.getHeight();
     				}
-    				x += background.getWidth();
+    				x += currentScreen.bg.getWidth();
     				y = 0;
     			}
     		}
@@ -108,7 +108,11 @@ public class GameView extends SurfaceView {
     		
     		for ( int i=0 ; i<text.length ; i++ ){
     			canvas.drawText(text[i].text, text[i].x, text[i].y, text[i].paint);
-    		} 
+    		}
+    		
+    		for ( int i=0 ; i<images.length ; i++ ){
+    			canvas.drawBitmap(images[i].bmp, images[i].x, images[i].y, null);
+    		}
 
     	}
 
@@ -150,6 +154,10 @@ public class GameView extends SurfaceView {
 		}
 		
 		currentScreen = config.screenCache.get(action);
+		
+		buttons = currentScreen.buttons;
+		text = currentScreen.text;
+		images = currentScreen.images;
 		
 		
 		return true;
