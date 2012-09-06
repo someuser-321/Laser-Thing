@@ -79,7 +79,7 @@ public class ConfigManager {
 					String bgname = getAttribute(screen, "bg");
 					Bitmap background = BitmapFactory.decodeStream(assets_.open(bgname));
 					
-					screenCache.put(name, new Screen(buttons_, text_, images_, background));
+					screenCache.put(name, new Screen(buttons_, text_, images_, background, name));
 
 				}
 			

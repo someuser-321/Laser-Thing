@@ -10,14 +10,17 @@ public class Screen {
 	public Image[] images;
 	public Bitmap bg;
 	
+	public String name;
 	
-	public Screen(Button[] buttons_, Text[] text_, Image[] images_, Bitmap bg_){
+	
+	public Screen(Button[] buttons_, Text[] text_, Image[] images_, Bitmap bg_, String name_){
 		
 		buttons = buttons_;
 		text = text_;
 		images = images_;
 		
 		bg = bg_;
+		name = name_;
 		
 	}
 
