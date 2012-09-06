@@ -29,6 +29,7 @@ public class GameLoopThread extends Thread {
 		long sleepTime;
 		
 		while (running) {
+			
 			Canvas c = null;
 			startTime = System.currentTimeMillis();
 			try {
@@ -50,6 +51,7 @@ public class GameLoopThread extends Thread {
 					sleep(sleepTime);
 				} catch (Exception e) {}
 			}
+			
 		}
 		
 	}

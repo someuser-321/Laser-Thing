@@ -26,9 +26,6 @@ public class GameView extends SurfaceView {
     public Button[] buttons;
     private Image[] images;
     private Text[] text;
-    
-    private boolean loading = true;
-    private Paint paint = new Paint();
 
 	
 	public GameView(Context context_) {
@@ -79,21 +76,15 @@ public class GameView extends SurfaceView {
 			}
 		);
 
+		config = new ConfigManager(context.getAssets());
+		changeScreen("menu");
+		
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
 		
     	if (canvas != null){
-    		
-    		if ( loading ){
-    			canvas.drawText("Loading...", 600, 350, paint);
-    			System.out.println("Loading screens...");
-    			loading = false;
-    			config = new ConfigManager(context.getAssets());
-    			System.out.println("Loaded screens... Changing screen...");
-    			changeScreen("menu");
-    		}
     		
     		canvas.drawColor(Color.BLACK);
     		
