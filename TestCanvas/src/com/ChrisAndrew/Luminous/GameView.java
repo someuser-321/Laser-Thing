@@ -26,6 +26,9 @@ public class GameView extends SurfaceView {
     public Button[] buttons;
     private Image[] images;
     private Text[] text;
+    
+    private boolean loading = true;
+    private Paint paint = new Paint();
 
 	
 	public GameView(Context context_) {
@@ -76,16 +79,21 @@ public class GameView extends SurfaceView {
 			}
 		);
 
-		
-		config = new ConfigManager(context.getAssets());
-		changeScreen("menu");
-
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
 		
     	if (canvas != null){
+    		
+    		if ( loading ){
+    			canvas.drawText("Loading...", 600, 350, paint);
+    			System.out.println("Loading screens...");
+    			loading = false;
+    			config = new ConfigManager(context.getAssets());
+    			System.out.println("Loaded screens... Changing screen...");
+    			changeScreen("menu");
+    		}
     		
     		canvas.drawColor(Color.BLACK);
     		
@@ -102,14 +110,8 @@ public class GameView extends SurfaceView {
     		}
 
     		for ( int i=0 ; i<buttons.length ; i++ ){
-    			if ( buttons[i] != null ){
     				canvas.drawBitmap(buttons[i].bmp, buttons[i].x_min, buttons[i].y_min, null);
     				canvas.drawText(buttons[i].text, (buttons[i].x_min + buttons[i].x_max)/2, (buttons[i].y_min + buttons[i].y_max)/2+16, buttons[i].paint);
-    			} else {
-    				System.out.println("button[" + i + "] on screen '" + currentScreen.name + "' is null");
-    				String k = null;
-    				int z = Integer.parseInt(k);
-    			}
     		}
     		
     		for ( int i=0 ; i<text.length ; i++ ){
@@ -154,8 +156,9 @@ public class GameView extends SurfaceView {
 	
 	public boolean changeScreen(String action){
 
+		touch = new TouchPoint();
+		
 		if ( action.equals("none") ){
-			touch = new TouchPoint();
 			return false;
 		}
 		

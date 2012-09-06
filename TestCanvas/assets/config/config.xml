@@ -3,8 +3,8 @@
 <screens width="1280" height="752">
     
     <screen name="menu" bg="images/tile.png" type="menu">
-        <button x="465" y="0" width="350" height="250" img="images/title_back.png" screen="none" textsize="1"> </button>
-        <button x="490" y="75" width="300" height="170" img="images/title.png" screen="none" textsize="1"> </button>
+        <image x="465" y="0" width="350" height="250" img="images/title_back.png" screen="none" textsize="1"></image>
+        <image x="490" y="75" width="300" height="170" img="images/title.png" screen="none" textsize="1"></image>
         <button x="440" y="300" width="400" height="100" img="images/button.png" screen="levels" textsize="64">LEVELS</button>
         <button x="440" y="420" width="400" height="100" img="images/button.png" screen="options" textsize="64">OPTIONS</button>
         <button x="440" y="540" width="400" height="100" img="images/button.png" screen="help" textsize="64">HELP</button>

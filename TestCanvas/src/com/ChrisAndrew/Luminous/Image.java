@@ -17,7 +17,7 @@ public class Image {
 		y = y_;
 		width = width_;
 		height = height_;
-		bmp = Bitmap.createScaledBitmap(bmp, (int)width, (int)height, false);
+		bmp = bmp_;
 		
 	}
 	

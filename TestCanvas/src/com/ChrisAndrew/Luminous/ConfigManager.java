@@ -2,7 +2,6 @@ package com.ChrisAndrew.Luminous;
 
 
 import java.io.*;
-import java.util.Enumeration;
 import java.util.Hashtable;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -178,24 +177,19 @@ public class ConfigManager {
 					String text = root.item(i).getFirstChild().getNodeValue();
 					
 					if ( text == null )
-						System.out.println("text is null");
+						Debug.log("text is null");
 					
 					Bitmap bmp = null;
 					
 					try {
 						bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(assets_.open(getAttribute(root.item(i), "img"))), width, height, false);
 					} catch  ( IOException e ) {
-						System.out.println("button bitmap is null");
+						Debug.log("button bitmap is null");
 					}
 					
 					
 					Button button = new Button(x, y, x + width, y + height, action, text, bmp, size, assets_);
 					buttonCache.put(String.valueOf(i), button);
-					
-					if (button == null )
-						System.out.println("button is null");
-					else
-						System.out.println("button is not null");
 					
 				}
 			}
@@ -256,11 +250,11 @@ public class ConfigManager {
 					
 					float x = Float.parseFloat(getAttribute(root.item(i), "x"));
 					float y = Float.parseFloat(getAttribute(root.item(i), "y"));
-					float width = Float.parseFloat(getAttribute(root.item(i), "width"));
-					float height = Float.parseFloat(getAttribute(root.item(i), "height"));
+					int width = Integer.parseInt(getAttribute(root.item(i), "width"));
+					int height = Integer.parseInt(getAttribute(root.item(i), "height"));
 					Bitmap bmp = null;
 					try {
-						bmp = BitmapFactory.decodeStream(assets_.open(getAttribute(root.item(i), "img")));
+						bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(assets_.open(getAttribute(root.item(i), "img"))), width, height, false);
 					} catch  ( IOException e ) {}
 					
 					
@@ -273,17 +267,6 @@ public class ConfigManager {
 
 		Debug.log("getImages() found '" + i + "' image(s)");
 		return imageCache;
-	}
-	
-	private void prettyPrint(Node node, String padding){
-		
-		Debug.log("+" + padding + node.getNodeName());
-		NodeList z = node.getChildNodes();
-		
-		for ( int i=0 ; i<z.getLength() ; i++ ){
-			prettyPrint(z.item(i), padding + "----");
-		}
-		
 	}
 
 }
