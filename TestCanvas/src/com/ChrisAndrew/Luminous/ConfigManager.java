@@ -2,6 +2,7 @@ package com.ChrisAndrew.Luminous;
 
 
 import java.io.*;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -25,7 +26,6 @@ public class ConfigManager {
 	private InputStream file;
 	private AssetManager assets_;
 	
-	private NodeList screens;
 	public Hashtable<String, Screen> screenCache = new Hashtable<String, Screen>();
 	
 	public float width, height;
@@ -42,7 +42,7 @@ public class ConfigManager {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc = db.parse(file);
 
-			screens = doc.getElementsByTagName("screens").item(0).getChildNodes();
+			NodeList screens = doc.getElementsByTagName("screens").item(0).getChildNodes();
 			width = 1280;
 			height = 752;
 			
@@ -51,35 +51,53 @@ public class ConfigManager {
 			} else {
 				Debug.log("screen width = '" + width + "'");
 				Debug.log("screen height = '" + height + "'");
+				Debug.log("screens.getLength() = " + screens.getLength());
 			
 				for ( int i=0 ; i<screens.getLength() ; i++ ){
 					
 					Node screen = screens.item(i);
-					String name = screen.getNodeValue();
 					
-					Hashtable<String, Button> buttons = getButtons(screen);
-					Button[] buttons_ = new Button[buttons.size()];
-					for ( String key : buttons.keySet() ){
-						buttons_[i] = buttons.get(key);
-					}
+					if ( screen.getNodeType() != Node.TEXT_NODE){
+						
+						String name = getAttribute(screen, "name");
+						Debug.log("screen name = " + name);
+						
+						Hashtable<String, Button> buttons = getButtons(screen);
+						Button[] buttons_ = new Button[buttons.size()];
+						
+						int j = 0;
+						for ( String key : buttons.keySet() ){
+							buttons_[j] = buttons.get(key);
+							j++;
+						}
 					
-					Hashtable<String, Image> images = getImages(screen);
-					Image[] images_ = new Image[images.size()];
-					for ( String key : images.keySet() ){
-						images_[i] = images.get(key);
-					}
+						Hashtable<String, Image> images = getImages(screen);
+						Image[] images_ = new Image[images.size()];
+						
+						j = 0;
+						for ( String key : images.keySet() ){
+							images_[j] = images.get(key);
+							j++;
+						}
 					
-					Hashtable<String, Text> text = getText(screen);
-					Text[] text_ = new Text[text.size()];
+						Hashtable<String, Text> text = getText(screen);
+						Text[] text_ = new Text[text.size()];
 
-					for ( String key : text.keySet() ){
-						text_[i] = text.get(key);
+						j = 0;
+						for ( String key : text.keySet() ){
+							text_[j] = text.get(key);
+							j++;
+						}
+					
+						String bgname = getAttribute(screen, "bg");
+						Debug.log("bg = " + bgname);
+						Bitmap background = BitmapFactory.decodeStream(assets_.open(bgname));
+					
+						screenCache.put(name, new Screen(buttons_, text_, images_, background, name));
+					
+					} else {
+						Debug.log("screen is null");
 					}
-					
-					String bgname = getAttribute(screen, "bg");
-					Bitmap background = BitmapFactory.decodeStream(assets_.open(bgname));
-					
-					screenCache.put(name, new Screen(buttons_, text_, images_, background, name));
 
 				}
 			
@@ -96,13 +114,13 @@ public class ConfigManager {
 		
 	}
 
-	public Node getScreen(String name){
+	public Node getScreen(String name, NodeList screens_){
 		
 		Node ret = null;
-		for ( int i=0 ; i<screens.getLength() ; i++ ){
-			if ( screens.item(i).getNodeType() != Node.TEXT_NODE ){
-				if ( getAttribute(screens.item(i), "name").equals(name) ){
-					ret = screens.item(i);
+		for ( int i=0 ; i<screens_.getLength() ; i++ ){
+			if ( screens_.item(i).getNodeType() != Node.TEXT_NODE ){
+				if ( getAttribute(screens_.item(i), "name").equals(name) ){
+					ret = screens_.item(i);
 					break;
 				}
 			}
@@ -152,21 +170,33 @@ public class ConfigManager {
 					
 					float x = Float.parseFloat(getAttribute(root.item(i), "x"));
 					float y = Float.parseFloat(getAttribute(root.item(i), "y"));
-					float width = Float.parseFloat(getAttribute(root.item(i), "width"));
-					float height = Float.parseFloat(getAttribute(root.item(i), "height"));
+					int width = Integer.parseInt(getAttribute(root.item(i), "width"));
+					int height = Integer.parseInt(getAttribute(root.item(i), "height"));
+					int size = Integer.parseInt(getAttribute(root.item(i), "textsize"));
 					
-					String action = getAttribute(root.item(i), "action");
-					String text = getAttribute(root.item(i), "text");
+					String action = getAttribute(root.item(i), "screen");
+					String text = root.item(i).getFirstChild().getNodeValue();
+					
+					if ( text == null )
+						System.out.println("text is null");
 					
 					Bitmap bmp = null;
 					
 					try {
-						bmp = BitmapFactory.decodeStream(assets_.open(getAttribute(root.item(i), "img")));
-					} catch  ( IOException e ) {}
+						bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(assets_.open(getAttribute(root.item(i), "img"))), width, height, false);
+					} catch  ( IOException e ) {
+						System.out.println("button bitmap is null");
+					}
 					
 					
-					Button button = new Button(x, y, x + width, y + height, action, text, bmp);
-					buttonCache.put(getAttribute(root.item(i), "src"), button);
+					Button button = new Button(x, y, x + width, y + height, action, text, bmp, size, assets_);
+					buttonCache.put(String.valueOf(i), button);
+					
+					if (button == null )
+						System.out.println("button is null");
+					else
+						System.out.println("button is not null");
+					
 				}
 			}
 		}
@@ -202,7 +232,7 @@ public class ConfigManager {
 
 					Text txt = new Text(x, y, text, size, align, r, g, b, assets_);
 
-					textCache.put(getAttribute(root.item(i), "src"), txt);
+					textCache.put(String.valueOf(i), txt);
 				}
 			}
 		}
@@ -216,6 +246,8 @@ public class ConfigManager {
 		NodeList root = screen.getChildNodes();
 		
 		Hashtable<String, Image> imageCache = new Hashtable<String, Image>();
+		
+		Debug.log("(getImages) root node is length " + root.getLength());
 		
 		int i;
 		for ( i=0 ; i<root.getLength() ; i++ ){
@@ -233,7 +265,7 @@ public class ConfigManager {
 					
 					
 					Image img = new Image(x, y, width, height, bmp);
-					imageCache.put(getAttribute(root.item(i), "src"), img);
+					imageCache.put(String.valueOf(i), img);
 				}
 			}
 		}

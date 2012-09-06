@@ -11,6 +11,7 @@ public class Screen {
 	public Bitmap bg;
 	
 	public String name;
+	public String type;
 	
 	
 	public Screen(Button[] buttons_, Text[] text_, Image[] images_, Bitmap bg_, String name_){

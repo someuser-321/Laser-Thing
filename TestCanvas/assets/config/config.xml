@@ -1,13 +1,16 @@
 <?xml version="1.0"?>
+
 <screens width="1280" height="752">
-    <screen name="menu" bg="images/tile.png">
+    
+    <screen name="menu" bg="images/tile.png" type="menu">
         <button x="465" y="0" width="350" height="250" img="images/title_back.png" screen="none" textsize="1"> </button>
         <button x="490" y="75" width="300" height="170" img="images/title.png" screen="none" textsize="1"> </button>
         <button x="440" y="300" width="400" height="100" img="images/button.png" screen="levels" textsize="64">LEVELS</button>
         <button x="440" y="420" width="400" height="100" img="images/button.png" screen="options" textsize="64">OPTIONS</button>
         <button x="440" y="540" width="400" height="100" img="images/button.png" screen="help" textsize="64">HELP</button>
     </screen>
-    <screen name="levels" bg="images/tile.png">
+    
+    <screen name="levels" bg="images/tile.png" type="menu">
         <button x="50" y="50" width="50" height="50" img="images/back.png" screen="menu" textsize="1"> </button>
         <button x="50" y="150" width="100" height="100" img="images/button_small_blue.png" screen="level1" textsize="36">1</button>
         <button x="50" y="300" width="100" height="100" img="images/button_small_blue.png" screen="level2" textsize="36">2</button>
@@ -24,13 +27,32 @@
         <button x="350" y="450" width="100" height="100" img="images/button_small_yellow.png" screen="level11" textsize="36">11</button>
         <button x="350" y="600" width="100" height="100" img="images/button_small_yellow.png" screen="level12" textsize="36">12</button>
     </screen>
-    <screen name="options" bg="images/tile.png">
+    
+    <screen name="options" bg="images/tile.png" type="menu">
         <button x="50" y="50" width="50" height="50" img="images/back.png" screen="menu" textsize="1"> </button>
     </screen>
-    <screen name="help" bg="images/tile.png">
+    
+    <screen name="help" bg="images/tile.png" type="menu">
         <button x="50" y="50" width="50" height="50" img="images/back.png" screen="menu" textsize="1"> </button>
         <text x="50" y="200" align="left" r="255" g="255" b="255" size="32">To play the game, reflect light from the source into the receiver.</text>
         <text x="50" y="240" align="left" r="255" g="255" b="255" size="32">It must receive over a certain amount of light for the level to complete.</text>
         <text x="50" y="280" align="left" r="255" g="255" b="255" size="32">Have fun!</text>
     </screen>
+    
+    <screen name="level1" bg="images/tile.png" type="game">
+        <button x="50" y="50" width="50" height="50" img="images/back.png" screen="levels" textsize="1"> </button>
+    </screen>
+    
+    <screen name="level2" bg="images/tile.png" type="game">
+        <button x="50" y="50" width="50" height="50" img="images/back.png" screen="levels" textsize="1"> </button>
+    </screen>
+    
+    <screen name="level3" bg="images/tile.png" type="game">
+        <button x="50" y="50" width="50" height="50" img="images/back.png" screen="levels" textsize="1"> </button>
+    </screen>
+    
+    <screen name="level4" bg="images/tile.png" type="game">
+        <button x="50" y="50" width="50" height="50" img="images/back.png" screen="levels" textsize="1"> </button>
+    </screen>
+    
 </screens>

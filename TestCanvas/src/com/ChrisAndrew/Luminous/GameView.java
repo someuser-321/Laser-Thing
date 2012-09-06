@@ -102,8 +102,14 @@ public class GameView extends SurfaceView {
     		}
 
     		for ( int i=0 ; i<buttons.length ; i++ ){
-    			canvas.drawBitmap(buttons[i].bmp, buttons[i].x_min, buttons[i].y_min, null);
-    			canvas.drawText(buttons[i].text, (buttons[i].x_min + buttons[i].x_max)/2, (buttons[i].y_min + buttons[i].y_max)/2+16, buttons[i].paint);
+    			if ( buttons[i] != null ){
+    				canvas.drawBitmap(buttons[i].bmp, buttons[i].x_min, buttons[i].y_min, null);
+    				canvas.drawText(buttons[i].text, (buttons[i].x_min + buttons[i].x_max)/2, (buttons[i].y_min + buttons[i].y_max)/2+16, buttons[i].paint);
+    			} else {
+    				System.out.println("button[" + i + "] on screen '" + currentScreen.name + "' is null");
+    				String k = null;
+    				int z = Integer.parseInt(k);
+    			}
     		}
     		
     		for ( int i=0 ; i<text.length ; i++ ){

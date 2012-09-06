@@ -52,7 +52,7 @@ public class Button {
 		
 	}
 	
-	public Button(float x_min_, float y_min_, float x_max_, float y_max_, String action_, String text_, Bitmap bmp_){
+	public Button(float x_min_, float y_min_, float x_max_, float y_max_, String action_, String text_, Bitmap bmp_, int size, AssetManager assets){
 		
 		x_min = x_min_;
 		y_min = y_min_;
@@ -64,14 +64,23 @@ public class Button {
 		
 		bmp = bmp_;
 		
+		paint = new Paint();
+		paint.setARGB(255, 255, 255, 255);
+		paint.setTextAlign(Align.CENTER);
+		paint.setTypeface(Typeface.createFromAsset(assets, "fonts/laserfont.ttf"));
+		paint.setAntiAlias(true);
+		paint.setTextSize(size);
+		
 		Debug.log("Button text = " + text );
 		Debug.log("Button action = " + action );
 
 	}
 	
 	public boolean press(GameView view){
+		
 		Debug.log("Button press text = " + text);
 		Debug.log("Button press action = " + action);
+		
 		return view.changeScreen(action);
 	}
 
