@@ -28,6 +28,12 @@ public class ConfigManager {
 	public Hashtable<String, Screen> screenCache = new Hashtable<String, Screen>();
 	public Hashtable<String, Bitmap> bitmapCache = new Hashtable<String, Bitmap>();
 	
+	private Hashtable<Integer, Image> imageCache = new Hashtable<Integer, Image>();
+	private Hashtable<Integer, Button> buttonCache = new Hashtable<Integer, Button>();
+	private Hashtable<Integer, Text> textCache = new Hashtable<Integer, Text>();
+	private Hashtable<Integer, Obstacle> obstacleCache = new Hashtable<Integer, Obstacle>();
+	
+	
 	public float width, height;
 	
 	
@@ -64,62 +70,52 @@ public class ConfigManager {
 						Debug.log("screen name = " + name, 0);
 						Debug.log("screen type = " + name, 0);
 
-						long start = System.currentTimeMillis();
-						Hashtable<Integer, Image> images = getImages(screen);
-						Image[] images_ = new Image[images.size()];
-						Debug.log("Images: " + String.valueOf(System.currentTimeMillis() - start) + "ms", 100);
+						imageCache.clear();
+						buttonCache.clear();
+						textCache.clear();
+						obstacleCache.clear();
+						
+						getElements(screen);
+
+						Image[] images_ = new Image[imageCache.size()];
+						Button[] buttons_ = new Button[buttonCache.size()];
+						Text[] text_ = new Text[textCache.size()];
+						Obstacle[] obstacles_ = new Obstacle[obstacleCache.size()];
+						
 						
 						int j = 0;
-						for (  int key : images.keySet() ){
-							images_[j] = images.get(key);
+						for (  int key : imageCache.keySet() ){
+							images_[j] = imageCache.get(key);
 							j++;
 						}
-						
-						
-						start = System.currentTimeMillis();
-						Hashtable<Integer, Button> buttons = getButtons(screen);
-						Button[] buttons_ = new Button[buttons.size()];
-						Debug.log("Buttons: " + String.valueOf(System.currentTimeMillis() - start) + "ms", 100);
 						
 						j = 0;
-						for ( int key : buttons.keySet() ){
-							buttons_[j] = buttons.get(key);
+						for ( int key : buttonCache.keySet() ){
+							buttons_[j] = buttonCache.get(key);
 							j++;
 						}
-					
-						
-						start = System.currentTimeMillis();
-						Hashtable<Integer, Text> text = getText(screen);
-						Text[] text_ = new Text[text.size()];
-						Debug.log("Text: " + String.valueOf(System.currentTimeMillis() - start) + "ms", 100);
 
 						j = 0;
-						for ( int key : text.keySet() ){
-							text_[j] = text.get(key);
+						for ( int key : textCache.keySet() ){
+							text_[j] = textCache.get(key);
 							j++;
 						}
-					
+
+						j = 0;
+						for ( int key : obstacleCache.keySet() ){
+							obstacles_[j] = obstacleCache.get(key);
+							j++;
+						}
+						
+						
 						String bgname = getAttribute(screen, "bg");
 						Debug.log("bg = " + bgname, 0);
 						Bitmap background = BitmapFactory.decodeStream(assets_.open(bgname));
 
-							
-						start = System.currentTimeMillis();
-						Hashtable<Integer, Obstacle> obstacles = getObstacles(screen);
-						Obstacle[] obstacles_ = new Obstacle[obstacles.size()];
-						Debug.log("Obstacles: " + String.valueOf(System.currentTimeMillis() - start) + "ms", 100);
-						
-						j = 0;
-						for ( int key : obstacles.keySet() ){
-							obstacles_[j] = obstacles.get(key);
-							j++;
-						}
-						
-						
 						Obstacle source = getSource(screen);
 					
+						
 						screenCache.put(name, new Screen(buttons_, text_, images_, obstacles_, source, background, name, type));
-					
 					}
 
 				}
@@ -180,7 +176,110 @@ public class ConfigManager {
 		return ret;
 	}
 	
-	public Hashtable<Integer, Button> getButtons(Node screen){
+	public void getElements(Node screen){
+		
+		NodeList root = screen.getChildNodes();
+		
+		//Hashtable<Integer, Button> buttonCache = new Hashtable<Integer, Button>();
+		//Hashtable<Integer, Text> textCache = new Hashtable<Integer, Text>();
+		//Hashtable<Integer, Image> imageCache = new Hashtable<Integer, Image>();
+		//Hashtable<Integer, Obstacle> objectCache = new Hashtable<Integer, Obstacle>();
+		
+		int i;
+		for ( i=0 ; i<root.getLength() ; i++ ){
+			if ( root.item(i).getNodeType() != Node.TEXT_NODE ){
+				if ( root.item(i).getNodeName().equals("button") ){
+					
+					float x = Float.parseFloat(getAttribute(root.item(i), "x"));
+					float y = Float.parseFloat(getAttribute(root.item(i), "y"));
+					int width = Integer.parseInt(getAttribute(root.item(i), "width"));
+					int height = Integer.parseInt(getAttribute(root.item(i), "height"));
+					int size = Integer.parseInt(getAttribute(root.item(i), "textsize"));
+					
+					String action = getAttribute(root.item(i), "screen");
+					String text = root.item(i).getFirstChild().getNodeValue();
+					
+					if ( text == null )
+						Debug.log("text is null", 100);
+					
+					String src = getAttribute(root.item(i), "img");
+					
+					if ( !bitmapCache.containsKey(src) ){
+						bitmapCache.put(String.valueOf(src), getBitmap(src, width, height));
+					}
+
+					Bitmap bmp = bitmapCache.get(src);
+					
+					
+					Button button = new Button(x, y, x + width, y + height, action, text, bmp, size, assets_);
+					buttonCache.put(i, button);
+					
+				} else if ( root.item(i).getNodeName().equals("text") ){
+					
+					float x = Float.parseFloat(getAttribute(root.item(i), "x"));
+					float y = Float.parseFloat(getAttribute(root.item(i), "y"));
+					
+					int r = Integer.parseInt(getAttribute(root.item(i), "r"));
+					int g = Integer.parseInt(getAttribute(root.item(i), "g"));
+					int b = Integer.parseInt(getAttribute(root.item(i), "b"));
+					
+					String align = getAttribute(root.item(i), "align");
+					int size = Integer.parseInt(getAttribute(root.item(i), "size"));
+					
+					String text = root.item(i).getFirstChild().getNodeValue();
+
+
+					Text txt = new Text(x, y, text, size, align, r, g, b, assets_);
+
+					textCache.put(i, txt);
+					
+				} else if ( root.item(i).getNodeName().equals("image") ){
+					
+					float x = Float.parseFloat(getAttribute(root.item(i), "x"));
+					float y = Float.parseFloat(getAttribute(root.item(i), "y"));
+					int width = Integer.parseInt(getAttribute(root.item(i), "width"));
+					int height = Integer.parseInt(getAttribute(root.item(i), "height"));
+					
+					String src = getAttribute(root.item(i), "img");
+					
+					if ( !bitmapCache.containsKey(src) ){
+						bitmapCache.put(String.valueOf(src), getBitmap(src, width, height));
+					}
+					
+					Image img = new Image(x, y, width, height, bitmapCache.get(src));
+					
+					imageCache.put(i, img);
+
+				} else if ( root.item(i).getNodeName().equals("object") ){
+					
+					float x = Float.parseFloat(getAttribute(root.item(i), "x"));
+					float y = Float.parseFloat(getAttribute(root.item(i), "y"));
+					float width = Integer.parseInt(getAttribute(root.item(i), "width"));
+					float height = Integer.parseInt(getAttribute(root.item(i), "height"));
+					float rotation = Float.parseFloat(getAttribute(root.item(i), "rotation"));
+					
+					String src = getAttribute(root.item(i), "img");
+					
+					if ( !bitmapCache.containsKey(src) ){
+						bitmapCache.put(String.valueOf(src), getBitmap(src, width, height));
+					}
+					
+					Bitmap bmp = bitmapCache.get(src);
+					
+					String type = getAttribute(root.item(i), "type");
+					
+					Obstacle obs = new Obstacle(type, x, y, width, height, rotation, bmp);
+					
+					obstacleCache.put(i, obs);
+
+				}
+			}
+		}
+		
+		
+	}
+	
+	/*public Hashtable<Integer, Button> getButtons(Node screen){
 		
 		NodeList root = screen.getChildNodes();
 		
@@ -223,9 +322,9 @@ public class ConfigManager {
 
 		Debug.log("getImages() found '" + i + "' image(s)", 0);
 		return buttonCache;
-	}
+	}*/
 	
-	public Hashtable<Integer, Text> getText(Node screen){
+	/*public Hashtable<Integer, Text> getText(Node screen){
 		
 		NodeList root = screen.getChildNodes();
 		
@@ -258,9 +357,9 @@ public class ConfigManager {
 		
 		Debug.log("getText() found '" + i + "' text(s)", 0);
 		return textCache;
-	}
+	}*/
 	
-	public Hashtable<Integer, Image> getImages(Node screen){
+	/*public Hashtable<Integer, Image> getImages(Node screen){
 		
 		NodeList root = screen.getChildNodes();
 		Hashtable<Integer, Image> ret = new Hashtable<Integer, Image>();
@@ -293,9 +392,9 @@ public class ConfigManager {
 		
 		Debug.log("getImages() found '" + i + "' image(s)", 0);
 		return ret;
-	}
+	}*/
 	
-	private Hashtable<Integer, Obstacle> getObstacles(Node screen){
+	/*private Hashtable<Integer, Obstacle> getObstacles(Node screen){
 		
 		NodeList root = screen.getChildNodes();
 		Hashtable<Integer, Obstacle> ret = new Hashtable<Integer, Obstacle>();
@@ -333,7 +432,7 @@ public class ConfigManager {
 		
 		Debug.log("getObstacles() found '" + i + "' obstacle(s)", 0);
 		return ret;
-	}
+	}*/
 	
 	private Obstacle getSource(Node screen){
 		
