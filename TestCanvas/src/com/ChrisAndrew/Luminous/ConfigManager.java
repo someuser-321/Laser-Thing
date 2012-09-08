@@ -56,12 +56,13 @@ public class ConfigManager {
 				for ( int i=0 ; i<screens.getLength() ; i++ ){
 					
 					Node screen = screens.item(i);
-					String type = getAttribute(screen, "type");
 					
 					if ( screen.getNodeType() != Node.TEXT_NODE){
 						
 						String name = getAttribute(screen, "name");
+						String type = getAttribute(screen, "type");
 						Debug.log("screen name = " + name, 0);
+						Debug.log("screen type = " + name, 0);
 
 						long start = System.currentTimeMillis();
 						Hashtable<Integer, Image> images = getImages(screen);
@@ -71,18 +72,6 @@ public class ConfigManager {
 						int j = 0;
 						for (  int key : images.keySet() ){
 							images_[j] = images.get(key);
-							j++;
-						}
-						
-						
-						start = System.currentTimeMillis();
-						Hashtable<Integer, Obstacle> obstacles = getObstacles(screen);
-						Obstacle[] obstacles_ = new Obstacle[obstacles.size()];
-						Debug.log("Obstacles: " + String.valueOf(System.currentTimeMillis() - start) + "ms", 100);
-						
-						j = 0;
-						for ( int key : obstacles.keySet() ){
-							obstacles_[j] = obstacles.get(key);
 							j++;
 						}
 						
@@ -113,6 +102,19 @@ public class ConfigManager {
 						String bgname = getAttribute(screen, "bg");
 						Debug.log("bg = " + bgname, 0);
 						Bitmap background = BitmapFactory.decodeStream(assets_.open(bgname));
+
+							
+						start = System.currentTimeMillis();
+						Hashtable<Integer, Obstacle> obstacles = getObstacles(screen);
+						Obstacle[] obstacles_ = new Obstacle[obstacles.size()];
+						Debug.log("Obstacles: " + String.valueOf(System.currentTimeMillis() - start) + "ms", 100);
+						
+						j = 0;
+						for ( int key : obstacles.keySet() ){
+							obstacles_[j] = obstacles.get(key);
+							j++;
+						}
+						
 						
 						Obstacle source = getSource(screen);
 					
