@@ -26,6 +26,7 @@ public class ConfigManager {
 	private AssetManager assets_;
 	
 	public Hashtable<String, Screen> screenCache = new Hashtable<String, Screen>();
+	public Hashtable<String, Image> images = new Hashtable<String, Image>();
 	
 	public float width, height;
 	
@@ -60,27 +61,35 @@ public class ConfigManager {
 						
 						String name = getAttribute(screen, "name");
 						Debug.log("screen name = " + name);
-						
-						Hashtable<String, Button> buttons = getButtons(screen);
-						Button[] buttons_ = new Button[buttons.size()];
+
+						long start = System.currentTimeMillis();
+						getImages(screen);
+						Image[] images_ = new Image[images.size()];
+						System.out.println("Images: " + String.valueOf(System.currentTimeMillis() - start));
 						
 						int j = 0;
+						for ( String key : images.keySet() ){
+							images_[j] = images.get(key);
+							j++;
+						}
+						
+						
+						start = System.currentTimeMillis();
+						Hashtable<String, Button> buttons = getButtons(screen);
+						Button[] buttons_ = new Button[buttons.size()];
+						System.out.println("Buttons: " + String.valueOf(System.currentTimeMillis() - start));
+						
+						j = 0;
 						for ( String key : buttons.keySet() ){
 							buttons_[j] = buttons.get(key);
 							j++;
 						}
 					
-						Hashtable<String, Image> images = getImages(screen);
-						Image[] images_ = new Image[images.size()];
 						
-						j = 0;
-						for ( String key : images.keySet() ){
-							images_[j] = images.get(key);
-							j++;
-						}
-					
+						start = System.currentTimeMillis();
 						Hashtable<String, Text> text = getText(screen);
 						Text[] text_ = new Text[text.size()];
+						System.out.println("Text: " + String.valueOf(System.currentTimeMillis() - start));
 
 						j = 0;
 						for ( String key : text.keySet() ){
@@ -179,19 +188,20 @@ public class ConfigManager {
 					if ( text == null )
 						Debug.log("text is null");
 					
-					Bitmap bmp = null;
+					String src = getAttribute(root.item(i), "img");
 					
-					try {
-						bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(assets_.open(getAttribute(root.item(i), "img"))), width, height, false);
-					} catch  ( IOException e ) {
-						Debug.log("button bitmap is null");
+					if ( !images.containsKey(src) ){
+						images.put(String.valueOf(src), getImage(src, x, y, width, height));
 					}
+
+					Bitmap bmp = images.get(src).bmp;
 					
 					
 					Button button = new Button(x, y, x + width, y + height, action, text, bmp, size, assets_);
 					buttonCache.put(String.valueOf(i), button);
-					
 				}
+					
+			
 			}
 		}
 		
@@ -235,11 +245,11 @@ public class ConfigManager {
 		return textCache;
 	}
 	
-	public Hashtable<String, Image> getImages(Node screen){
+	public void /*Hashtable<String, Image>*/ getImages(Node screen){
 		
 		NodeList root = screen.getChildNodes();
 		
-		Hashtable<String, Image> imageCache = new Hashtable<String, Image>();
+		//Hashtable<String, Image> imageCache = new Hashtable<String, Image>();
 		
 		Debug.log("(getImages) root node is length " + root.getLength());
 		
@@ -250,23 +260,33 @@ public class ConfigManager {
 					
 					float x = Float.parseFloat(getAttribute(root.item(i), "x"));
 					float y = Float.parseFloat(getAttribute(root.item(i), "y"));
-					int width = Integer.parseInt(getAttribute(root.item(i), "width"));
-					int height = Integer.parseInt(getAttribute(root.item(i), "height"));
-					Bitmap bmp = null;
-					try {
-						bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(assets_.open(getAttribute(root.item(i), "img"))), width, height, false);
-					} catch  ( IOException e ) {}
+					float width = Integer.parseInt(getAttribute(root.item(i), "width"));
+					float height = Integer.parseInt(getAttribute(root.item(i), "height"));
 					
+					String src = getAttribute(root.item(i), "img");
 					
-					Image img = new Image(x, y, width, height, bmp);
-					imageCache.put(String.valueOf(i), img);
+					if ( !images.containsKey(src) ){
+						images.put(String.valueOf(src), getImage(src, x, y, width, height));
+					}
+
 				}
 			}
 		}
 		
 
 		Debug.log("getImages() found '" + i + "' image(s)");
-		return imageCache;
+		//return imageCache;
+	}
+	
+	private Image getImage(String src, float x, float y, float width_, float height_){
+		
+		Image ret = null;
+
+		try {
+			ret = new Image(x, y, width_, height_, Bitmap.createScaledBitmap(BitmapFactory.decodeStream(assets_.open(src)), (int)width_, (int)height_, false));
+		} catch  ( IOException e ) {}
+		
+		return ret;
 	}
 
 }

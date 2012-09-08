@@ -1,16 +1,8 @@
 package com.ChrisAndrew.Luminous;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import android.app.Dialog;
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.graphics.*;
-import android.graphics.drawable.Drawable;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnPreparedListener;
 import android.util.DisplayMetrics;
 import android.view.*;
 
@@ -37,7 +29,7 @@ public class GameView extends SurfaceView {
 
 	
 	public GameView(Context context_) {
-	
+
 		super(context_);
 		
 		context = context_;
@@ -82,26 +74,12 @@ public class GameView extends SurfaceView {
 
 			}
 		);
-		
-		View dialogView = new View(context_);
-		InputStream in = null;
-		
-		try {
-			in = context_.getAssets().open("images/splash.png");
-		} catch (IOException e) {}
-		
-		Drawable background = Drawable.createFromStream(in, null);
-		dialogView.setBackgroundDrawable(background);
-		
-		Dialog splash = new Dialog(context_);
-		splash.setContentView(dialogView);
-		splash.setCancelable(false);
-		splash.show();
-		
+
+		long start = System.currentTimeMillis();
 		config = new ConfigManager(context.getAssets());
-		changeScreen("menu");
+		Debug.log("Total: " + String.valueOf(System.currentTimeMillis() - start));
 		
-		splash.dismiss();
+		changeScreen("menu");
 		
 	}
 
