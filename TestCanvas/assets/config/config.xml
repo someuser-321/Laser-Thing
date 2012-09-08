@@ -41,6 +41,7 @@
     
     <screen name="level1" bg="images/tile.png" type="game">
         <button x="50" y="50" width="50" height="50" img="images/back.png" screen="levels" textsize="1"> </button>
+        <object x="200" y ="200" width="200" height="200" rotation="0" img="images/mirror.png" type="mirror"></object>
     </screen>
     
     <screen name="level2" bg="images/tile.png" type="game">

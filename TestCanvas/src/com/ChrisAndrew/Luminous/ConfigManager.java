@@ -64,36 +64,48 @@ public class ConfigManager {
 						Debug.log("screen name = " + name, 0);
 
 						long start = System.currentTimeMillis();
-						Hashtable<String, Image> images = getImages(screen);
+						Hashtable<Integer, Image> images = getImages(screen);
 						Image[] images_ = new Image[images.size()];
 						Debug.log("Images: " + String.valueOf(System.currentTimeMillis() - start) + "ms", 100);
 						
 						int j = 0;
-						for ( String key : images.keySet() ){
+						for (  int key : images.keySet() ){
 							images_[j] = images.get(key);
 							j++;
 						}
 						
 						
 						start = System.currentTimeMillis();
-						Hashtable<String, Button> buttons = getButtons(screen);
+						Hashtable<Integer, Obstacle> obstacles = getObstacles(screen);
+						Obstacle[] obstacles_ = new Obstacle[obstacles.size()];
+						Debug.log("Obstacles: " + String.valueOf(System.currentTimeMillis() - start) + "ms", 100);
+						
+						j = 0;
+						for ( int key : obstacles.keySet() ){
+							obstacles_[j] = obstacles.get(key);
+							j++;
+						}
+						
+						
+						start = System.currentTimeMillis();
+						Hashtable<Integer, Button> buttons = getButtons(screen);
 						Button[] buttons_ = new Button[buttons.size()];
 						Debug.log("Buttons: " + String.valueOf(System.currentTimeMillis() - start) + "ms", 100);
 						
 						j = 0;
-						for ( String key : buttons.keySet() ){
+						for ( int key : buttons.keySet() ){
 							buttons_[j] = buttons.get(key);
 							j++;
 						}
 					
 						
 						start = System.currentTimeMillis();
-						Hashtable<String, Text> text = getText(screen);
+						Hashtable<Integer, Text> text = getText(screen);
 						Text[] text_ = new Text[text.size()];
 						Debug.log("Text: " + String.valueOf(System.currentTimeMillis() - start) + "ms", 100);
 
 						j = 0;
-						for ( String key : text.keySet() ){
+						for ( int key : text.keySet() ){
 							text_[j] = text.get(key);
 							j++;
 						}
@@ -101,8 +113,10 @@ public class ConfigManager {
 						String bgname = getAttribute(screen, "bg");
 						Debug.log("bg = " + bgname, 0);
 						Bitmap background = BitmapFactory.decodeStream(assets_.open(bgname));
+						
+						Obstacle source = getSource(screen);
 					
-						screenCache.put(name, new Screen(buttons_, text_, images_, background, name, type));
+						screenCache.put(name, new Screen(buttons_, text_, images_, obstacles_, source, background, name, type));
 					
 					}
 
@@ -164,11 +178,11 @@ public class ConfigManager {
 		return ret;
 	}
 	
-	public Hashtable<String, Button> getButtons(Node screen){
+	public Hashtable<Integer, Button> getButtons(Node screen){
 		
 		NodeList root = screen.getChildNodes();
 		
-		Hashtable<String, Button> buttonCache = new Hashtable<String, Button>();
+		Hashtable<Integer, Button> buttonCache = new Hashtable<Integer, Button>();
 		
 		int i;
 		for ( i=0 ; i<root.getLength() ; i++ ){
@@ -197,7 +211,7 @@ public class ConfigManager {
 					
 					
 					Button button = new Button(x, y, x + width, y + height, action, text, bmp, size, assets_);
-					buttonCache.put(String.valueOf(i), button);
+					buttonCache.put(i, button);
 				}
 					
 			
@@ -209,11 +223,11 @@ public class ConfigManager {
 		return buttonCache;
 	}
 	
-	public Hashtable<String, Text> getText(Node screen){
+	public Hashtable<Integer, Text> getText(Node screen){
 		
 		NodeList root = screen.getChildNodes();
 		
-		Hashtable<String, Text> textCache = new Hashtable<String, Text>();
+		Hashtable<Integer, Text> textCache = new Hashtable<Integer, Text>();
 		
 		int i;
 		for ( i=0 ; i<root.getLength() ; i++ ){
@@ -235,7 +249,7 @@ public class ConfigManager {
 
 					Text txt = new Text(x, y, text, size, align, r, g, b, assets_);
 
-					textCache.put(String.valueOf(i), txt);
+					textCache.put(i, txt);
 				}
 			}
 		}
@@ -244,10 +258,10 @@ public class ConfigManager {
 		return textCache;
 	}
 	
-	public Hashtable<String, Image> getImages(Node screen){
+	public Hashtable<Integer, Image> getImages(Node screen){
 		
 		NodeList root = screen.getChildNodes();
-		Hashtable<String, Image> ret = new Hashtable<String, Image>();
+		Hashtable<Integer, Image> ret = new Hashtable<Integer, Image>();
 		
 		Debug.log("(getImages) root node is length " + root.getLength(), 0);
 		
@@ -269,7 +283,7 @@ public class ConfigManager {
 					
 					Image img = new Image(x, y, width, height, bitmapCache.get(src));
 					
-					ret.put(String.valueOf(i), img);
+					ret.put(i, img);
 
 				}
 			}
@@ -277,6 +291,78 @@ public class ConfigManager {
 		
 		Debug.log("getImages() found '" + i + "' image(s)", 0);
 		return ret;
+	}
+	
+	private Hashtable<Integer, Obstacle> getObstacles(Node screen){
+		
+		NodeList root = screen.getChildNodes();
+		Hashtable<Integer, Obstacle> ret = new Hashtable<Integer, Obstacle>();
+		
+		Debug.log("(getObstacles) root node is length " + root.getLength(), 0);
+		
+		int i;
+		for ( i=0 ; i<root.getLength() ; i++ ){
+			if ( root.item(i).getNodeType() != Node.TEXT_NODE ){
+				if ( root.item(i).getNodeName().equals("object") ){
+					
+					float x = Float.parseFloat(getAttribute(root.item(i), "x"));
+					float y = Float.parseFloat(getAttribute(root.item(i), "y"));
+					float width = Integer.parseInt(getAttribute(root.item(i), "width"));
+					float height = Integer.parseInt(getAttribute(root.item(i), "height"));
+					float rotation = Float.parseFloat(getAttribute(root.item(i), "rotation"));
+					
+					String src = getAttribute(root.item(i), "img");
+					
+					if ( !bitmapCache.containsKey(src) ){
+						bitmapCache.put(String.valueOf(src), getBitmap(src, width, height));
+					}
+					
+					Bitmap bmp = bitmapCache.get(src);
+					
+					String type = getAttribute(root.item(i), "type");
+					
+					Obstacle obs = new Obstacle(type, x, y, width, height, rotation, bmp);
+					
+					ret.put(i, obs);
+
+				}
+			}
+		}
+		
+		Debug.log("getObstacles() found '" + i + "' obstacle(s)", 0);
+		return ret;
+	}
+	
+	private Obstacle getSource(Node screen){
+		
+		NodeList root = screen.getChildNodes();
+		Obstacle ret = null;
+		
+		int i;
+		for ( i=0 ; i<root.getLength() ; i++ ){
+			if ( root.item(i).getNodeType() != Node.TEXT_NODE ){
+				if ( root.item(i).getNodeName().equals("source") ){
+					
+					float x = Float.parseFloat(getAttribute(root.item(i), "x"));
+					float y = Float.parseFloat(getAttribute(root.item(i), "y"));
+					
+					String src = getAttribute(root.item(i), "img");
+					String colour = getAttribute(root.item(i), "colour");
+					
+					if ( !bitmapCache.containsKey(src) ){
+						bitmapCache.put(String.valueOf(src), getBitmap(src, width, height));
+					}
+					
+					Bitmap bmp = bitmapCache.get(src);
+					
+					ret = new Obstacle(x, y, colour, bmp);
+					break;
+				}
+			}
+		}
+		
+		return ret;
+	
 	}
 	
 	private Bitmap getBitmap(String src, float width_, float height_){

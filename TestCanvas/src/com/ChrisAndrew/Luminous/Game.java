@@ -12,8 +12,14 @@ public class Game {
 	
 	public int tick(){
 		
-		if (input_tick(gameView.touch) | physics_tick() | render_tick())
+		if ( input_tick(gameView.touch) | render_tick() )
 			return 1;
+		if ( gameView.needsUpdate ){
+			gameView.needsUpdate = false;
+			if ( physics_tick() )
+				return 1;
+		}
+		
 		
 		return 0;
 	}
@@ -34,6 +40,8 @@ public class Game {
 		
 		if ( gameView.currentScreen.type.equals("game") ){
 		
+			gameView.rays = trace_beams(gameView.source, gameView.obstacles);
+			
 		}
 		
 		return false;
@@ -51,6 +59,15 @@ public class Game {
 			return true;
 
 		return false;
+	}
+	
+	private Ray[] trace_beams(Obstacle source_, Obstacle[] obstacles_){
+		
+		Ray[] ret = new Ray[1];
+		
+		
+		return ret;
+	
 	}
 
 }

@@ -26,7 +26,12 @@ public class GameView extends SurfaceView {
     public Button[] buttons;
     private Image[] images;
     private Text[] text;
+    public Obstacle[] obstacles;
+    
+    public Obstacle source;
+    public Ray[] rays;
 
+    public boolean needsUpdate = true;
 	
 	public GameView(Context context_) {
 
@@ -113,6 +118,10 @@ public class GameView extends SurfaceView {
     		
     		for ( int i=0 ; i<images.length ; i++ ){
     			canvas.drawBitmap(images[i].bmp, images[i].x, images[i].y, null);
+    		}    	
+    		
+    		for ( int i=0 ; i<obstacles.length ; i++ ){
+    			canvas.drawBitmap(obstacles[i].bmp, obstacles[i].x, obstacles[i].y, null);
     		}
 
     	}
@@ -160,6 +169,7 @@ public class GameView extends SurfaceView {
 		buttons = currentScreen.buttons;
 		text = currentScreen.text;
 		images = currentScreen.images;
+		obstacles = currentScreen.obstacles;
 		
 		
 		return true;
