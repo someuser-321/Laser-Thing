@@ -26,7 +26,7 @@ public class ConfigManager {
 	private AssetManager assets_;
 	
 	public Hashtable<String, Screen> screenCache = new Hashtable<String, Screen>();
-	public Hashtable<String, Image> images = new Hashtable<String, Image>();
+	public Hashtable<String, Bitmap> bitmapCache = new Hashtable<String, Bitmap>();
 	
 	public float width, height;
 	
@@ -47,25 +47,26 @@ public class ConfigManager {
 			height = 752;
 			
 			if ( screens == null ){
-				Debug.log("screens = null");
+				Debug.log("screens = null", 100);
 			} else {
-				Debug.log("screen width = '" + width + "'");
-				Debug.log("screen height = '" + height + "'");
-				Debug.log("screens.getLength() = " + screens.getLength());
+				Debug.log("screen width = '" + width + "'", 0);
+				Debug.log("screen height = '" + height + "'", 0);
+				Debug.log("screens.getLength() = " + screens.getLength(), 0);
 			
 				for ( int i=0 ; i<screens.getLength() ; i++ ){
 					
 					Node screen = screens.item(i);
+					String type = getAttribute(screen, "type");
 					
 					if ( screen.getNodeType() != Node.TEXT_NODE){
 						
 						String name = getAttribute(screen, "name");
-						Debug.log("screen name = " + name);
+						Debug.log("screen name = " + name, 0);
 
 						long start = System.currentTimeMillis();
-						getImages(screen);
+						Hashtable<String, Image> images = getImages(screen);
 						Image[] images_ = new Image[images.size()];
-						System.out.println("Images: " + String.valueOf(System.currentTimeMillis() - start));
+						Debug.log("Images: " + String.valueOf(System.currentTimeMillis() - start) + "ms", 100);
 						
 						int j = 0;
 						for ( String key : images.keySet() ){
@@ -77,7 +78,7 @@ public class ConfigManager {
 						start = System.currentTimeMillis();
 						Hashtable<String, Button> buttons = getButtons(screen);
 						Button[] buttons_ = new Button[buttons.size()];
-						System.out.println("Buttons: " + String.valueOf(System.currentTimeMillis() - start));
+						Debug.log("Buttons: " + String.valueOf(System.currentTimeMillis() - start) + "ms", 100);
 						
 						j = 0;
 						for ( String key : buttons.keySet() ){
@@ -89,7 +90,7 @@ public class ConfigManager {
 						start = System.currentTimeMillis();
 						Hashtable<String, Text> text = getText(screen);
 						Text[] text_ = new Text[text.size()];
-						System.out.println("Text: " + String.valueOf(System.currentTimeMillis() - start));
+						Debug.log("Text: " + String.valueOf(System.currentTimeMillis() - start) + "ms", 100);
 
 						j = 0;
 						for ( String key : text.keySet() ){
@@ -98,13 +99,11 @@ public class ConfigManager {
 						}
 					
 						String bgname = getAttribute(screen, "bg");
-						Debug.log("bg = " + bgname);
+						Debug.log("bg = " + bgname, 0);
 						Bitmap background = BitmapFactory.decodeStream(assets_.open(bgname));
 					
-						screenCache.put(name, new Screen(buttons_, text_, images_, background, name));
+						screenCache.put(name, new Screen(buttons_, text_, images_, background, name, type));
 					
-					} else {
-						Debug.log("screen is null");
 					}
 
 				}
@@ -113,11 +112,11 @@ public class ConfigManager {
 				
 			
 		} catch ( IOException e ){
-			Debug.log("IOException: Unable to open config file");
+			Debug.log("IOException: Unable to open config file", 1000);
 		} catch ( ParserConfigurationException e ){
-			Debug.log("ParserConfigurationException: Unable to build document");
+			Debug.log("ParserConfigurationException: Unable to build document", 1000);
 		} catch ( SAXException e ){
-			Debug.log("SAXException: Unable to parse config file");
+			Debug.log("SAXException: Unable to parse config file", 1000);
 		}
 		
 	}
@@ -135,9 +134,9 @@ public class ConfigManager {
 		}
 		
 		if ( ret == null )
-			Debug.log("getScreen() ret = null");
+			Debug.log("getScreen() ret = null", 100);
 		else
-			Debug.log("getScreen() returned a node of length '" + ret.getChildNodes().getLength() + "'");
+			Debug.log("getScreen() returned a node of length '" + ret.getChildNodes().getLength() + "'", 0);
 		
 		return ret;
 	}
@@ -158,9 +157,9 @@ public class ConfigManager {
 		}
 		
 		if ( ret == null )
-			Debug.log("getAttribute(" + attr + ") ret = null");
+			Debug.log("getAttribute(" + attr + ") ret = null", 0);
 		else
-			Debug.log("getAttribute(" + attr + ") returned '" + ret + "'");
+			Debug.log("getAttribute(" + attr + ") returned '" + ret + "'", 0);
 		
 		return ret;
 	}
@@ -186,15 +185,15 @@ public class ConfigManager {
 					String text = root.item(i).getFirstChild().getNodeValue();
 					
 					if ( text == null )
-						Debug.log("text is null");
+						Debug.log("text is null", 100);
 					
 					String src = getAttribute(root.item(i), "img");
 					
-					if ( !images.containsKey(src) ){
-						images.put(String.valueOf(src), getImage(src, x, y, width, height));
+					if ( !bitmapCache.containsKey(src) ){
+						bitmapCache.put(String.valueOf(src), getBitmap(src, width, height));
 					}
 
-					Bitmap bmp = images.get(src).bmp;
+					Bitmap bmp = bitmapCache.get(src);
 					
 					
 					Button button = new Button(x, y, x + width, y + height, action, text, bmp, size, assets_);
@@ -206,7 +205,7 @@ public class ConfigManager {
 		}
 		
 
-		Debug.log("getImages() found '" + i + "' image(s)");
+		Debug.log("getImages() found '" + i + "' image(s)", 0);
 		return buttonCache;
 	}
 	
@@ -241,17 +240,16 @@ public class ConfigManager {
 			}
 		}
 		
-		Debug.log("getText() found '" + i + "' text(s)");
+		Debug.log("getText() found '" + i + "' text(s)", 0);
 		return textCache;
 	}
 	
-	public void /*Hashtable<String, Image>*/ getImages(Node screen){
+	public Hashtable<String, Image> getImages(Node screen){
 		
 		NodeList root = screen.getChildNodes();
+		Hashtable<String, Image> ret = new Hashtable<String, Image>();
 		
-		//Hashtable<String, Image> imageCache = new Hashtable<String, Image>();
-		
-		Debug.log("(getImages) root node is length " + root.getLength());
+		Debug.log("(getImages) root node is length " + root.getLength(), 0);
 		
 		int i;
 		for ( i=0 ; i<root.getLength() ; i++ ){
@@ -260,30 +258,33 @@ public class ConfigManager {
 					
 					float x = Float.parseFloat(getAttribute(root.item(i), "x"));
 					float y = Float.parseFloat(getAttribute(root.item(i), "y"));
-					float width = Integer.parseInt(getAttribute(root.item(i), "width"));
-					float height = Integer.parseInt(getAttribute(root.item(i), "height"));
+					int width = Integer.parseInt(getAttribute(root.item(i), "width"));
+					int height = Integer.parseInt(getAttribute(root.item(i), "height"));
 					
 					String src = getAttribute(root.item(i), "img");
 					
-					if ( !images.containsKey(src) ){
-						images.put(String.valueOf(src), getImage(src, x, y, width, height));
+					if ( !bitmapCache.containsKey(src) ){
+						bitmapCache.put(String.valueOf(src), getBitmap(src, width, height));
 					}
+					
+					Image img = new Image(x, y, width, height, bitmapCache.get(src));
+					
+					ret.put(String.valueOf(i), img);
 
 				}
 			}
 		}
 		
-
-		Debug.log("getImages() found '" + i + "' image(s)");
-		//return imageCache;
+		Debug.log("getImages() found '" + i + "' image(s)", 0);
+		return ret;
 	}
 	
-	private Image getImage(String src, float x, float y, float width_, float height_){
+	private Bitmap getBitmap(String src, float width_, float height_){
 		
-		Image ret = null;
+		Bitmap ret = null;
 
 		try {
-			ret = new Image(x, y, width_, height_, Bitmap.createScaledBitmap(BitmapFactory.decodeStream(assets_.open(src)), (int)width_, (int)height_, false));
+			ret = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(assets_.open(src)), (int)width_, (int)height_, false);
 		} catch  ( IOException e ) {}
 		
 		return ret;

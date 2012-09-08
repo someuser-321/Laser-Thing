@@ -32,6 +32,9 @@ public class Game {
 	
 	private boolean physics_tick(){
 		
+		if ( gameView.currentScreen.type.equals("game") ){
+		
+		}
 		
 		return false;
 	}

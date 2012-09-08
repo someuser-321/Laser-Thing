@@ -71,15 +71,15 @@ public class Button {
 		paint.setAntiAlias(true);
 		paint.setTextSize(size);
 		
-		Debug.log("Button text = " + text );
-		Debug.log("Button action = " + action );
+		Debug.log("Button text = " + text, 0);
+		Debug.log("Button action = " + action, 0);
 
 	}
 	
 	public boolean press(GameView view){
 		
-		Debug.log("Button press text = " + text);
-		Debug.log("Button press action = " + action);
+		Debug.log("Button press text = " + text, 0);
+		Debug.log("Button press action = " + action, 0);
 		
 		return view.changeScreen(action);
 	}

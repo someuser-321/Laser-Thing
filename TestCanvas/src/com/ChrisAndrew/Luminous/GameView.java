@@ -22,7 +22,7 @@ public class GameView extends SurfaceView {
     
     public ConfigManager config;
     
-    private Screen currentScreen;
+    public Screen currentScreen;
     public Button[] buttons;
     private Image[] images;
     private Text[] text;
@@ -39,9 +39,9 @@ public class GameView extends SurfaceView {
 		display.getMetrics(dm);
 		
 		screenwidth = dm.widthPixels;
-		Debug.log("screenwidth = " + screenwidth);
+		Debug.log("screenwidth = " + screenwidth, 10);
 		screenheight = dm.heightPixels;
-		Debug.log("screenheight = " + screenheight);
+		Debug.log("screenheight = " + screenheight, 10);
 		
 		gameLoopThread = new GameLoopThread(this);
 		holder = getHolder();
@@ -77,7 +77,7 @@ public class GameView extends SurfaceView {
 
 		long start = System.currentTimeMillis();
 		config = new ConfigManager(context.getAssets());
-		Debug.log("Total: " + String.valueOf(System.currentTimeMillis() - start));
+		Debug.log("Total: " + String.valueOf(System.currentTimeMillis() - start) + "ms", 100);
 		
 		changeScreen("menu");
 		

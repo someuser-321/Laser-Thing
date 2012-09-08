@@ -14,7 +14,7 @@ public class Screen {
 	public String type;
 	
 	
-	public Screen(Button[] buttons_, Text[] text_, Image[] images_, Bitmap bg_, String name_){
+	public Screen(Button[] buttons_, Text[] text_, Image[] images_, Bitmap bg_, String name_, String type_){
 		
 		buttons = buttons_;
 		text = text_;
@@ -22,6 +22,7 @@ public class Screen {
 		
 		bg = bg_;
 		name = name_;
+		type = type_;
 		
 	}
 
