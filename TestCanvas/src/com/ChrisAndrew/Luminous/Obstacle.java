@@ -8,28 +8,35 @@ public class Obstacle {
 	public String type;
 	public String colour;
 	
-	public float x;
-	public float y;
+	public float x, x_;
+	public float y, y_;
 	
 	public float width;
 	public float height;
 	
 	public float rotation;
+	public float[] normal = {-1.0f, 0.0f};
 	
 	public Bitmap bmp;
 	
 	
-	public Obstacle(String type_, float x_, float y_, float width_, float height_, float rotation_, Bitmap bmp_){
+	public Obstacle(String type_, float _x, float _y, float width_, float height_, float rotation_, Bitmap bmp_){
 		
 		type = type_;
 		
-		x = x_;
-		y = y_;
+		x = _x;
+		y = _y;
 		
 		width = width_;
 		height = height_;
 		
 		rotation = rotation_;
+		
+		x_ = x + (float)Math.cos(rotation)*width;
+		y_ = y + (float)Math.sin(rotation)*height;
+		
+		Vector n;
+		
 		bmp = bmp_;
 		
 	}

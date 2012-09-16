@@ -1,9 +1,17 @@
 package com.ChrisAndrew.Luminous;
 
 
+import java.math.*;
+
+
 public class Game {
 	
 	private GameView gameView;
+	
+	private final int NUM_RAYS = 100;
+	private final double PI = Math.PI;
+	
+	private Obstacle[] obstacles;
 	
 	
 	public Game(GameView view){
@@ -40,7 +48,7 @@ public class Game {
 		
 		if ( gameView.currentScreen.type.equals("game") ){
 		
-			gameView.rays = trace_beams(gameView.source, gameView.obstacles);
+			gameView.rays = trace_rays(gameView.source, gameView.obstacles);
 			
 		}
 		
@@ -53,7 +61,7 @@ public class Game {
 		return false;
 	}
 
-	private boolean test_intercept(TouchPoint touchpoint, float x_min, float x_max, float y_min, float y_max){
+	private boolean test_intercept(TouchPoint touchpoint, double x_min, double x_max, double y_min, double y_max){
 		
 		if (x_min < touchpoint.x && touchpoint.x < x_max && y_min < touchpoint.y && touchpoint.y < y_max && touchpoint.down == false )
 			return true;
@@ -61,13 +69,56 @@ public class Game {
 		return false;
 	}
 	
-	private Ray[] trace_beams(Obstacle source_, Obstacle[] obstacles_){
+	private Ray[] trace_rays(Obstacle source_, Obstacle[] obstacles_){
 		
-		Ray[] ret = new Ray[1];
+		Ray[] ret = new Ray[NUM_RAYS];
+		obstacles = obstacles_;
+		
+		float x = source_.x;
+		float y = source_.y;
+		
+		double angle_const = PI*NUM_RAYS*2;
+		
+		for ( int i=0 ; i<NUM_RAYS ; i++ ){
+			ret[i] = new Ray(x, y, (float)(x+Math.cos(angle_const/i)/10), (float)(y+Math.sin(angle_const/i)/10));
+			traverse_ray(ret[i]);
+		}
 		
 		
 		return ret;
+	}
 	
+	private Ray[] traverse_ray(Ray ray){
+		
+		Ray[] ret = new Ray[8];
+		ret[0] = ray;
+		
+		int index = 1;
+		
+		for ( int i=0 ; i<obstacles.length ; i++ ){
+			
+			float x = obstacles[i].x;
+			float y = obstacles[i].y;
+			float x_ = obstacles[i].x_;
+			float y_ = obstacles[i].y_;
+
+			if ( ray.intercept(x, y, x_, y_) ){
+				
+				Debug.log("Intersection! Ray with object["+i+"]", 0);
+				
+				Ray[] rays = traverse_ray(new Ray(x, y, obstacles[i].normal[0], obstacles[i].normal[1]));
+				
+				for ( int j=0 ; j<index ; j++ ){
+					ret[index] = rays[j];
+				}
+				index++;
+				
+			}
+			
+		}
+		
+		
+		return ret;
 	}
 
 }
